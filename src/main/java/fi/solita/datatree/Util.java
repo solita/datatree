@@ -8,27 +8,27 @@ import java.util.*;
 
 class Util {
 
-    static List<Meta> copyMeta(Node[] nodes) {
-        if (nodes == null) {
+    public static List<Meta> copyMeta(TreeOrMeta[] xs) {
+        if (xs == null) {
             return Collections.emptyList();
         }
-        List<Meta> result = new ArrayList<>(nodes.length);
-        for (Node node : nodes) {
-            if (node instanceof Meta) {
-                result.add((Meta) node);
+        List<Meta> result = new ArrayList<>(xs.length);
+        for (TreeOrMeta x : xs) {
+            if (x instanceof Meta) {
+                result.add((Meta) x);
             }
         }
         return Arrays.asList(result.toArray(new Meta[result.size()]));
     }
 
-    static List<Tree> copyTrees(Node[] nodes) {
-        if (nodes == null) {
+    public static List<Tree> copyTrees(TreeOrMeta[] xs) {
+        if (xs == null) {
             return Collections.emptyList();
         }
-        List<Tree> result = new ArrayList<>(nodes.length);
-        for (Node node : nodes) {
-            if (node instanceof Tree) {
-                result.add((Tree) node);
+        List<Tree> result = new ArrayList<>(xs.length);
+        for (TreeOrMeta x : xs) {
+            if (x instanceof Tree) {
+                result.add((Tree) x);
             }
         }
         return Arrays.asList(result.toArray(new Tree[result.size()]));

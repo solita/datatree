@@ -4,9 +4,9 @@
 
 package fi.solita.datatree;
 
-public abstract class Node {
+public abstract class TreeOrMeta {
 
-    // package-private to prevent outsiders from extending this class
-    Node() {
+    // package-private to prevent outsiders from adding more subclasses
+    TreeOrMeta() {
     }
 }

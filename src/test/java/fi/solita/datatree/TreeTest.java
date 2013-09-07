@@ -21,25 +21,53 @@ public class TreeTest {
     @Test
     public void has_a_name() {
         Tree t = tree("name");
+
         assertThat(t.name(), is("name"));
+    }
+
+    @Test
+    public void name_cannot_be_null() {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("name");
+        tree(null);
     }
 
     @Test
     public void may_contain_text() {
         Tree t = tree("name", "content");
-        assertThat(t.text(), is("content"));
+
+        assertThat(t.content(), is("content"));
+    }
+
+    @Test
+    public void content_cannot_be_null() {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("content");
+        tree("name", (String) null);
     }
 
     @Test
     public void may_contain_child_trees() {
         Tree t = tree("root", tree("child 1"), tree("child 2"));
+
         assertThat(t.children(), contains(tree("child 1"), tree("child 2")));
     }
 
     @Test
-    public void may_contain_meta_data() {
+    public void may_contain_meta() {
         Tree t = tree("root", meta("a", "foo"), meta("b", "bar"));
-        assertThat(t.meta(), contains(meta("a", "foo"), meta("b", "bar")));
+
+        assertThat(t.metae(), contains(meta("a", "foo"), meta("b", "bar")));
+        assertThat("query by key", t.meta("a"), is("foo"));
+        assertThat("query by non-existing key", t.meta("no such key"), is(""));
+    }
+
+    @Test
+    public void may_contain_both_meta_and_child_trees() {
+        Tree t = tree("root", meta("a", "1"), tree("b", "2"));
+
+        assertThat(t.metae(), contains(meta("a", "1")));
+        assertThat(t.children(), contains(tree("b", "2")));
     }
 
     @Test
@@ -48,6 +76,13 @@ public class TreeTest {
         assertThat("text content", tree("a", "txt").toString(), is("(a \"txt\")"));
         assertThat("meta", tree("a", meta("m1", "n1"), meta("m2", "n2")).toString(), is("(a {m1 \"n1\"} {m2 \"n2\"})"));
         assertThat("children", tree("a", tree("b"), tree("c")).toString(), is("(a (b) (c))"));
+
+        assertThat("meta is always before children",
+                tree("a",
+                        tree("b"),
+                        meta("m", ""),
+                        tree("c")
+                ).toString(), is("(a {m} (b) (c))"));
     }
 
     @Test
@@ -62,12 +97,12 @@ public class TreeTest {
         assertFalse("equals: different meta name", tree("a", meta("m", "n")).equals(tree("a", meta("x", "n"))));
         assertFalse("equals: different meta value", tree("a", meta("m", "n")).equals(tree("a", meta("m", "x"))));
         assertFalse("equals: different children", tree("a", tree("b")).equals(tree("a", tree("x"))));
-    }
 
-    @Test
-    public void name_is_required() {
-        thrown.expect(NullPointerException.class);
-        thrown.expectMessage("name");
-        tree(null);
+        assertFalse("equals: null", tree("a").equals(null));
+        assertFalse("equals: another type", tree("a").equals(new Object()));
+
+        assertEquals("hashCode",
+                tree("root", meta("a", "1"), tree("b", "2")).hashCode(),
+                tree("root", meta("a", "1"), tree("b", "2")).hashCode());
     }
 }

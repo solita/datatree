@@ -6,7 +6,7 @@ package fi.solita.datatree;
 
 import java.util.Objects;
 
-public class Meta extends Node {
+public final class Meta extends TreeOrMeta {
 
     private final String name;
     private final String value;
@@ -18,18 +18,43 @@ public class Meta extends Node {
         this.value = value;
     }
 
-    @Override
-    public String toString() {
-        return "{" + name + " \"" + value + "\"}";
+    public String name() {
+        return name;
+    }
+
+    public String value() {
+        return value;
     }
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
         if (!(obj instanceof Meta)) {
             return false;
         }
         Meta that = (Meta) obj;
         return this.name.equals(that.name) &&
                 this.value.equals(that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + value.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('{');
+        sb.append(name);
+        if (!value.isEmpty()) {
+            sb.append(' ').append('"').append(value).append('"');
+        }
+        sb.append('}');
+        return sb.toString();
     }
 }

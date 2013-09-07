@@ -6,47 +6,57 @@ package fi.solita.datatree;
 
 import java.util.*;
 
-public class Tree extends Node {
+public final class Tree extends TreeOrMeta {
 
     private final String name;
     private final String content;
-    private final List<Meta> meta;
+    private final List<Meta> metae;
     private final List<Tree> children;
 
     public static Tree tree(String name) {
-        return new Tree(name, null, null);
+        return new Tree(name, "");
     }
 
     public static Tree tree(String name, String content) {
-        return new Tree(name, content, null);
+        return new Tree(name, content);
     }
 
-    public static Tree tree(String name, Node... children) {
-        return new Tree(name, null, children);
+    public static Tree tree(String name, TreeOrMeta... children) {
+        return new Tree(name, "", children);
     }
 
     public static Meta meta(String name, String value) {
         return new Meta(name, value);
     }
 
-    private Tree(String name, String content, Node... nodes) {
+    private Tree(String name, String content, TreeOrMeta... treeOrMetas) {
         Objects.requireNonNull(name, "name must be non-null");
+        Objects.requireNonNull(content, "content must be non-null");
         this.name = name;
         this.content = content;
-        this.meta = Util.copyMeta(nodes);
-        this.children = Util.copyTrees(nodes);
+        this.metae = Util.copyMeta(treeOrMetas);
+        this.children = Util.copyTrees(treeOrMetas);
     }
 
     public String name() {
         return name;
     }
 
-    public String text() {
+    public String content() {
         return content;
     }
 
-    public List<Meta> meta() {
-        return meta;
+    public List<Meta> metae() {
+        return metae;
+    }
+
+    public String meta(String name) {
+        for (Meta meta : metae) {
+            if (meta.name().equals(name)) {
+                return meta.value();
+            }
+        }
+        return "";
     }
 
     public List<Tree> children() {
@@ -55,14 +65,26 @@ public class Tree extends Node {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
         if (!(obj instanceof Tree)) {
             return false;
         }
         Tree that = (Tree) obj;
-        return Objects.equals(this.name, that.name) &&
-                Objects.equals(this.content, that.content) &&
-                Objects.equals(this.meta, that.meta) &&
-                Objects.equals(this.children, that.children);
+        return this.name.equals(that.name) &&
+                this.content.equals(that.content) &&
+                this.metae.equals(that.metae) &&
+                this.children.equals(that.children);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + content.hashCode();
+        result = 31 * result + metae.hashCode();
+        result = 31 * result + children.hashCode();
+        return result;
     }
 
     @Override
@@ -70,13 +92,13 @@ public class Tree extends Node {
         StringBuilder sb = new StringBuilder();
         sb.append('(');
         sb.append(name);
-        if (content != null) {
+        if (!content.isEmpty()) {
             sb.append(' ').append('"').append(content).append('"');
         }
-        for (Node child : meta) {
-            sb.append(' ').append(child.toString());
+        for (Meta meta : metae) {
+            sb.append(' ').append(meta.toString());
         }
-        for (Node child : children) {
+        for (Tree child : children) {
             sb.append(' ').append(child.toString());
         }
         sb.append(')');
