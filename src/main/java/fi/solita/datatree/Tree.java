@@ -21,21 +21,21 @@ public final class Tree extends TreeOrMeta {
         return new Tree(name, content);
     }
 
-    public static Tree tree(String name, TreeOrMeta... children) {
-        return new Tree(name, "", children);
+    public static Tree tree(String name, TreeOrMeta... metaeOrChildren) {
+        return new Tree(name, "", metaeOrChildren);
     }
 
     public static Meta meta(String name, String value) {
         return new Meta(name, value);
     }
 
-    private Tree(String name, String content, TreeOrMeta... treeOrMetas) {
+    private Tree(String name, String content, TreeOrMeta... metaeOrChildren) {
         Objects.requireNonNull(name, "name must be non-null");
         Objects.requireNonNull(content, "content must be non-null");
         this.name = name;
         this.content = content;
-        this.metae = Util.copyMeta(treeOrMetas);
-        this.children = Util.copyTrees(treeOrMetas);
+        this.metae = Util.filterMeta(metaeOrChildren);
+        this.children = Util.filterTree(metaeOrChildren);
     }
 
     public String name() {

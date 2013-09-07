@@ -8,7 +8,7 @@ import java.util.*;
 
 class Util {
 
-    public static List<Meta> copyMeta(TreeOrMeta[] xs) {
+    public static List<Meta> filterMeta(TreeOrMeta[] xs) {
         List<Meta> result = new ArrayList<>(xs.length);
         for (TreeOrMeta x : xs) {
             if (x instanceof Meta) {
@@ -18,7 +18,7 @@ class Util {
         return Arrays.asList(result.toArray(new Meta[result.size()]));
     }
 
-    public static List<Tree> copyTrees(TreeOrMeta[] xs) {
+    public static List<Tree> filterTree(TreeOrMeta[] xs) {
         List<Tree> result = new ArrayList<>(xs.length);
         for (TreeOrMeta x : xs) {
             if (x instanceof Tree) {
