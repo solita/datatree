@@ -81,6 +81,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>fi.jumi</groupId>
+            <artifactId>jumi-launcher</artifactId>
+            <version>0.5.390</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
