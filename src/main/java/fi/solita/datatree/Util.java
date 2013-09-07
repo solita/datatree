@@ -9,9 +9,6 @@ import java.util.*;
 class Util {
 
     public static List<Meta> copyMeta(TreeOrMeta[] xs) {
-        if (xs == null) {
-            return Collections.emptyList();
-        }
         List<Meta> result = new ArrayList<>(xs.length);
         for (TreeOrMeta x : xs) {
             if (x instanceof Meta) {
@@ -22,9 +19,6 @@ class Util {
     }
 
     public static List<Tree> copyTrees(TreeOrMeta[] xs) {
-        if (xs == null) {
-            return Collections.emptyList();
-        }
         List<Tree> result = new ArrayList<>(xs.length);
         for (TreeOrMeta x : xs) {
             if (x instanceof Tree) {

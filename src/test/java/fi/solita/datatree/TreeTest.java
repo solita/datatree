@@ -87,6 +87,8 @@ public class TreeTest {
 
     @Test
     public void is_value_object() {
+        Tree t = tree("a");
+        assertTrue("equals: itself", t.equals(t));
         assertTrue("equals: same name", tree("a").equals(tree("a")));
         assertTrue("equals: same content", tree("a", "txt").equals(tree("a", "txt")));
         assertTrue("equals: same meta", tree("a", meta("m", "n")).equals(tree("a", meta("m", "n"))));

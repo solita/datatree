@@ -4,13 +4,45 @@
 
 package fi.solita.datatree;
 
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 public class MetaTest {
+
+    @Rule
+    public final ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void has_a_name() {
+        Meta m = new Meta("name", "value");
+
+        assertThat(m.name(), is("name"));
+    }
+
+    @Test
+    public void name_cannot_be_null() {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("name");
+        new Meta(null, "value");
+    }
+
+    @Test
+    public void has_a_value() {
+        Meta m = new Meta("name", "value");
+
+        assertThat(m.value(), is("value"));
+    }
+
+    @Test
+    public void value_cannot_be_null() {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("value");
+        new Meta("name", null);
+    }
 
     @Test
     public void to_string() {
@@ -20,7 +52,9 @@ public class MetaTest {
 
     @Test
     public void is_value_object() {
-        assertTrue("equals: same", new Meta("a", "b").equals(new Meta("a", "b")));
+        Meta m = new Meta("a", "b");
+        assertTrue("equals: itself", m.equals(m));
+        assertTrue("equals: same name and value", new Meta("a", "b").equals(new Meta("a", "b")));
 
         assertFalse("equals: different name", new Meta("a", "b").equals(new Meta("x", "b")));
         assertFalse("equals: different value", new Meta("a", "b").equals(new Meta("a", "x")));
