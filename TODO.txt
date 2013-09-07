@@ -1,0 +1,8 @@
+
+- generating XML schemas
+	- find out what types and validation rules are required by our (immediate) use case
+	- manually written rules
+	- read rules automatically from validation annotated fields
+	- generate XML schema
+	- API-level validation should fail iff XML schema validation fails
+- release scripts (from BuildTest)
