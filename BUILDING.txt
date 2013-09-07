@@ -1,0 +1,9 @@
+
+Build the project:
+
+    mvn clean verify
+
+Create coverage report:
+
+    mvn clean verify -P coverage-report
+    open target/pit-reports/index.html
