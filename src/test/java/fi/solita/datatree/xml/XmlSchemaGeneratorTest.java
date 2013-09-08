@@ -56,16 +56,17 @@ public class XmlSchemaGeneratorTest {
                         tree("foo")));
     }
 
-    @Ignore // Java doesn't support XSD 1.1 out of box
     @Test
     public void max_occurrences() throws Exception {
+        // `maxOccurs > 1` inside xs:all requires XSD 1.1, which Java doesn't support out-of-the-box,
+        // so we must be satisfied with xs:sequence
+
         Tree schema = tree("xs:schema", meta("xmlns:xs", "http://www.w3.org/2001/XMLSchema"),
                 tree("xs:element", meta("name", "root"),
                         tree("xs:complexType",
-                                tree("xs:all",
+                                tree("xs:sequence",
                                         tree("xs:element",
                                                 meta("name", "foo"),
-                                                // `maxOccurs > 1` inside xs:all requires XSD 1.1
                                                 meta("maxOccurs", "2"))))));
 
         validate(schema,
@@ -96,7 +97,7 @@ public class XmlSchemaGeneratorTest {
         try {
             validator.validate(new DOMSource(XmlDocumentGenerator.toDocument(subject)));
         } catch (SAXException e) {
-            throw new ValidationException("not valid", e);
+            throw new ValidationException(e);
         }
     }
 
