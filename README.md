@@ -4,6 +4,18 @@ DataTree
 
 Simple way to generate XML documents and XML Schemas using Java.
 
+Requires Java 7 or greater.
+
+This project is available in Maven Central using the following dependency:
+
+```
+<dependency>
+    <groupId>fi.solita.datatree</groupId>
+    <artifactId>datatree</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+</dependency>
+```
+
 
 Why yet another XML library?
 ----------------------------

@@ -126,6 +126,17 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.4.6</version>
+                <configuration>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <serverId>ossrh-releases-fi.solita</serverId>
+                    <stagingProfileId>ff5044adfb72</stagingProfileId>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

@@ -5,4 +5,3 @@
 	- read rules automatically from validation annotated fields
 	- generate XML schema
 	- API-level validation should fail iff XML schema validation fails
-- release scripts (from BuildTest)
