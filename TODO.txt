@@ -1,7 +1,14 @@
 
-- generating XML schemas
+!! - generating XML schemas
+	!! - walking skeleton for the following validations:
+			* has element exactly 1 times
+			* has element 1 or more times
+			* has the desired elements, in any order
+				http://stackoverflow.com/questions/3607454/xml-schema-define-child-elements-0-in-any-order
+				http://stackoverflow.com/questions/2290360/xsd-how-to-allow-elements-in-any-order-any-number-of-times
+					-> requires XSD 1.1, see http://www.w3.org/TR/xmlschema11-1/#ch_models
+		- manually written rules
+		- read rules automatically from validation annotated fields
+		- generate XML schema
+		- API-level validation should fail iff XML schema validation fails
 	- find out what types and validation rules are required by our (immediate) use case
-	- manually written rules
-	- read rules automatically from validation annotated fields
-	- generate XML schema
-	- API-level validation should fail iff XML schema validation fails
