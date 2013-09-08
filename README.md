@@ -12,7 +12,7 @@ This project is available in Maven Central using the following dependency:
 <dependency>
     <groupId>fi.solita.datatree</groupId>
     <artifactId>datatree</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
@@ -27,3 +27,12 @@ about two days. To protect our sanity and to save time, we created this
 library to have a succint syntax for creating XML documents and generating
 the XML Schemas without duplicating the Bean Validation annotations that
 our model objects already had.
+
+
+Version History
+---------------
+
+### DataTree 0.1.0 (2013-09-08)
+
+- Can create a tree using succinct Java syntax
+- Can convert the tree into an XML document
