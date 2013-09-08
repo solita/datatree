@@ -21,8 +21,10 @@ public final class Tree extends TreeOrMeta {
         return new Tree(name, content);
     }
 
-    public static Tree tree(String name, TreeOrMeta... metaeOrChildren) {
-        return new Tree(name, "", metaeOrChildren);
+    public static Tree tree(String name, Object... metaeOrChildren) {
+        // TODO: write unit tests for this flattening behaviour, if it seems to be useful
+        // TODO: add support for String content being defined using this method; concatenate or allow mixing text with elements as in xml?
+        return new Tree(name, "", Util.flatten(metaeOrChildren));
     }
 
     public static Meta meta(String name, String value) {

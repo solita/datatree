@@ -27,4 +27,16 @@ class Util {
         }
         return Arrays.asList(result.toArray(new Tree[result.size()]));
     }
+
+    public static TreeOrMeta[] flatten(Object[] maybeArrays) {
+        List<TreeOrMeta> results = new ArrayList<>();
+        for (Object maybeArray : maybeArrays) {
+            if (maybeArray.getClass().isArray()) {
+                Collections.addAll(results, flatten((Object[]) maybeArray));
+            } else {
+                results.add((TreeOrMeta) maybeArray);
+            }
+        }
+        return results.toArray(new TreeOrMeta[results.size()]);
+    }
 }
