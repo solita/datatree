@@ -9,7 +9,7 @@ import java.util.*;
 public final class Tree extends TreeOrMeta {
 
     private final String name;
-    private final String content;
+    private final String text;
     private final List<Meta> metae;
     private final List<Tree> children;
 
@@ -17,8 +17,8 @@ public final class Tree extends TreeOrMeta {
         return new Tree(name, "");
     }
 
-    public static Tree tree(String name, String content) {
-        return new Tree(name, content);
+    public static Tree tree(String name, String text) {
+        return new Tree(name, text);
     }
 
     public static Tree tree(String name, Object... metaeOrChildren) {
@@ -31,11 +31,11 @@ public final class Tree extends TreeOrMeta {
         return new Meta(name, value);
     }
 
-    private Tree(String name, String content, TreeOrMeta... metaeOrChildren) {
+    private Tree(String name, String text, TreeOrMeta... metaeOrChildren) {
         Objects.requireNonNull(name, "name must be non-null");
-        Objects.requireNonNull(content, "content must be non-null");
+        Objects.requireNonNull(text, "text must be non-null");
         this.name = name;
-        this.content = content;
+        this.text = text;
         this.metae = Util.filterMeta(metaeOrChildren);
         this.children = Util.filterTree(metaeOrChildren);
     }
@@ -44,8 +44,8 @@ public final class Tree extends TreeOrMeta {
         return name;
     }
 
-    public String content() {
-        return content;
+    public String text() {
+        return text;
     }
 
     public List<Meta> metae() {
@@ -75,7 +75,7 @@ public final class Tree extends TreeOrMeta {
         }
         Tree that = (Tree) obj;
         return this.name.equals(that.name) &&
-                this.content.equals(that.content) &&
+                this.text.equals(that.text) &&
                 this.metae.equals(that.metae) &&
                 this.children.equals(that.children);
     }
@@ -83,7 +83,7 @@ public final class Tree extends TreeOrMeta {
     @Override
     public int hashCode() {
         int result = name.hashCode();
-        result = 31 * result + content.hashCode();
+        result = 31 * result + text.hashCode();
         result = 31 * result + metae.hashCode();
         result = 31 * result + children.hashCode();
         return result;
@@ -94,8 +94,8 @@ public final class Tree extends TreeOrMeta {
         StringBuilder sb = new StringBuilder();
         sb.append('(');
         sb.append(name);
-        if (!content.isEmpty()) {
-            sb.append(' ').append('"').append(content).append('"');
+        if (!text.isEmpty()) {
+            sb.append(' ').append('"').append(text).append('"');
         }
         for (Meta meta : metae) {
             sb.append(' ').append(meta.toString());

@@ -32,6 +32,10 @@ our model objects already had.
 Version History
 ---------------
 
+### Upcoming Changes
+
+- Renamed `Tree.content()` to `Tree.text()`
+
 ### DataTree 0.1.0 (2013-09-08)
 
 - Can create a tree using succinct Java syntax

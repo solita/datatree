@@ -35,7 +35,7 @@ public class XmlDocumentGenerator {
      */
     public static void appendElement(Document document, Node parent, Tree tree) {
         Element current = document.createElement(tree.name());
-        current.appendChild(document.createTextNode(tree.content()));
+        current.appendChild(document.createTextNode(tree.text()));
         parent.appendChild(current);
 
         for (Meta meta : tree.metae()) {

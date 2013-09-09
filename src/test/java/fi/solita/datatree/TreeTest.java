@@ -33,16 +33,16 @@ public class TreeTest {
     }
 
     @Test
-    public void may_contain_text() {
-        Tree t = tree("name", "content");
+    public void may_have_text() {
+        Tree t = tree("name", "text");
 
-        assertThat(t.content(), is("content"));
+        assertThat(t.text(), is("text"));
     }
 
     @Test
-    public void content_cannot_be_null() {
+    public void text_cannot_be_null() {
         thrown.expect(NullPointerException.class);
-        thrown.expectMessage("content");
+        thrown.expectMessage("text");
         tree("name", (String) null);
     }
 
@@ -73,7 +73,7 @@ public class TreeTest {
     @Test
     public void to_string() {
         assertThat("empty tree", tree("a").toString(), is("(a)"));
-        assertThat("text content", tree("a", "txt").toString(), is("(a \"txt\")"));
+        assertThat("text", tree("a", "txt").toString(), is("(a \"txt\")"));
         assertThat("meta", tree("a", meta("m1", "n1"), meta("m2", "n2")).toString(), is("(a {m1 \"n1\"} {m2 \"n2\"})"));
         assertThat("children", tree("a", tree("b"), tree("c")).toString(), is("(a (b) (c))"));
 
@@ -90,12 +90,12 @@ public class TreeTest {
         Tree t = tree("a");
         assertTrue("equals: itself", t.equals(t));
         assertTrue("equals: same name", tree("a").equals(tree("a")));
-        assertTrue("equals: same content", tree("a", "txt").equals(tree("a", "txt")));
+        assertTrue("equals: same text", tree("a", "txt").equals(tree("a", "txt")));
         assertTrue("equals: same meta", tree("a", meta("m", "n")).equals(tree("a", meta("m", "n"))));
         assertTrue("equals: same children", tree("a", tree("b")).equals(tree("a", tree("b"))));
 
         assertFalse("equals: different name", tree("a").equals(tree("x")));
-        assertFalse("equals: different content", tree("a", "content").equals(tree("a", "x")));
+        assertFalse("equals: different text", tree("a", "txt").equals(tree("a", "x")));
         assertFalse("equals: different meta name", tree("a", meta("m", "n")).equals(tree("a", meta("x", "n"))));
         assertFalse("equals: different meta value", tree("a", meta("m", "n")).equals(tree("a", meta("m", "x"))));
         assertFalse("equals: different children", tree("a", tree("b")).equals(tree("a", tree("x"))));
