@@ -11,7 +11,10 @@ public final class Meta {
     private final String name;
     private final String value;
 
-    public Meta(String name, String value) {
+    /**
+     * Construct using the factory method {@link Tree#meta(String, String)}
+     */
+    Meta(String name, String value) {
         Objects.requireNonNull(name, "name must be non-null");
         Objects.requireNonNull(value, "value must be non-null");
         this.name = name;

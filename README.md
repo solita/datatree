@@ -38,6 +38,8 @@ Version History
 - `tree()` accepts arrays and collections of its arguments and will flatten
 them. This is useful when splitting tree construction into helper methods
 - Renamed `Tree.content()` to `Tree.text()`
+- Made the `Meta` class' constructor package-private to encourage using the
+`Tree.meta()` factory method
 
 ### DataTree 0.1.0 (2013-09-08)
 
