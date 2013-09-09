@@ -33,6 +33,9 @@ class Util {
         for (Object maybeArray : maybeArrays) {
             if (maybeArray.getClass().isArray()) {
                 Collections.addAll(results, flatten((Object[]) maybeArray));
+            } else if (maybeArray instanceof Collection) {
+                Collection<?> coll = (Collection<?>) maybeArray;
+                Collections.addAll(results, flatten(coll.toArray()));
             } else {
                 results.add((TreeOrMeta) maybeArray);
             }

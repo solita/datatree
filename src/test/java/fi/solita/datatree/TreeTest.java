@@ -8,6 +8,8 @@ package fi.solita.datatree;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
+import java.util.*;
+
 import static fi.solita.datatree.Tree.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -68,6 +70,34 @@ public class TreeTest {
 
         assertThat(t.metae(), contains(meta("a", "1")));
         assertThat(t.children(), contains(tree("b", "2")));
+    }
+
+    @Test
+    public void will_flatten_array_arguments() {
+        Tree[] ab = {tree("a"), tree("b")};
+        Tree[] cd = {tree("c"), tree("d")};
+        Tree t = tree("root", ab, cd);
+
+        assertThat(t, is(
+                tree("root",
+                        tree("a"),
+                        tree("b"),
+                        tree("c"),
+                        tree("d"))));
+    }
+
+    @Test
+    public void will_flatten_collection_arguments() {
+        List<Tree> ab = Arrays.asList(tree("a"), tree("b"));
+        List<Tree> cd = Arrays.asList(tree("c"), tree("d"));
+        Tree t = tree("root", ab, cd);
+
+        assertThat(t, is(
+                tree("root",
+                        tree("a"),
+                        tree("b"),
+                        tree("c"),
+                        tree("d"))));
     }
 
     @Test
