@@ -12,7 +12,7 @@ This project is available in Maven Central using the following dependency:
 <dependency>
     <groupId>fi.solita.datatree</groupId>
     <artifactId>datatree</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
@@ -32,7 +32,7 @@ our model objects already had.
 Version History
 ---------------
 
-### Upcoming Changes
+### DataTree 0.2.0 (2013-09-09)
 
 - A tree node may now contain both text and meta data
 - `tree()` accepts arrays and collections of its arguments and will flatten
