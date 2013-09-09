@@ -89,7 +89,7 @@ public class TreeTest {
     @Test
     public void will_flatten_collection_arguments() {
         List<Tree> ab = Arrays.asList(tree("a"), tree("b"));
-        List<Tree> cd = Arrays.asList(tree("c"), tree("d"));
+        Collection<Tree> cd = Collections.unmodifiableCollection(Arrays.asList(tree("c"), tree("d")));
         Tree t = tree("root", ab, cd);
 
         assertThat(t, is(
