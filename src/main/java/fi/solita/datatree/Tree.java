@@ -27,6 +27,10 @@ public final class Tree {
         this.text = Util.filterOneString(content);
         this.metae = Util.filterMeta(content);
         this.children = Util.filterTree(content);
+        if (!text.isEmpty() && !children.isEmpty()) {
+            throw new IllegalArgumentException("Cannot contain both text and trees; " +
+                    "had text \"" + text + "\" and children " + children);
+        }
     }
 
     public String name() {

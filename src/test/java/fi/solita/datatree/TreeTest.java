@@ -87,6 +87,13 @@ public class TreeTest {
     }
 
     @Test
+    public void cannot_contain_both_text_and_child_trees() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Cannot contain both text and trees; had text \"foo\" and children [(bar)]");
+        tree("name", "foo", tree("bar"));
+    }
+
+    @Test
     public void will_flatten_array_arguments() {
         Tree[] ab = {tree("a"), tree("b")};
         Tree[] cd = {tree("c"), tree("d")};
