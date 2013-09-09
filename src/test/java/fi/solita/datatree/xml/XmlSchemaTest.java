@@ -8,7 +8,7 @@ import fi.solita.datatree.Tree;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
-import static fi.solita.datatree.Tree.tree;
+import static fi.solita.datatree.Tree.*;
 import static fi.solita.datatree.xml.XmlSchema.*;
 
 public class XmlSchemaTest {
@@ -47,7 +47,7 @@ public class XmlSchemaTest {
     }
 
     @Test
-    public void max_occurrences() throws Exception {
+    public void element_max_occurrences() throws Exception {
         // `maxOccurs > 1` inside xs:all requires XSD 1.1, which Java doesn't support out-of-the-box,
         // so we must be satisfied with xs:sequence
 
@@ -68,5 +68,28 @@ public class XmlSchemaTest {
                         tree("foo"),
                         tree("foo"),
                         tree("foo")));
+    }
+
+    @Test
+    public void attribute_name() throws Exception {
+        Tree schema = schema(
+                element("root", complexType(
+                        attribute("attr-name"))));
+
+        XmlSchemaValidator.validate(schema, tree("root"));
+        XmlSchemaValidator.validate(schema, tree("root", meta("attr-name", "attr-value")));
+        thrown.expect(ValidationException.class);
+        XmlSchemaValidator.validate(schema, tree("root", meta("wrong-attr-name", "attr-value")));
+    }
+
+    @Test
+    public void required_attribute() throws Exception {
+        Tree schema = schema(
+                element("root", complexType(
+                        attribute("attr-name", required()))));
+
+        XmlSchemaValidator.validate(schema, tree("root", meta("attr-name", "attr-value")));
+        thrown.expect(ValidationException.class);
+        XmlSchemaValidator.validate(schema, tree("root"));
     }
 }
