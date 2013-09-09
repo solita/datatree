@@ -35,6 +35,12 @@ public class TreeTest {
     }
 
     @Test
+    public void content_cannot_be_null() {
+        thrown.expect(NullPointerException.class);
+        tree("name", (Object) null);
+    }
+
+    @Test
     public void may_have_text() {
         Tree t = tree("name", "text");
 
@@ -42,10 +48,10 @@ public class TreeTest {
     }
 
     @Test
-    public void text_cannot_be_null() {
-        thrown.expect(NullPointerException.class);
-        thrown.expectMessage("text");
-        tree("name", (String) null);
+    public void cannot_have_more_than_one_text() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Cannot have more than one text string; tried to add \"bar\" when already had \"foo\"");
+        tree("name", "foo", "bar");
     }
 
     @Test
@@ -65,11 +71,19 @@ public class TreeTest {
     }
 
     @Test
+    public void may_contain_both_meta_and_text() {
+        Tree t = tree("root", meta("a", "1"), "some text");
+
+        assertThat("metae", t.metae(), contains(meta("a", "1")));
+        assertThat("text", t.text(), is("some text"));
+    }
+
+    @Test
     public void may_contain_both_meta_and_child_trees() {
         Tree t = tree("root", meta("a", "1"), tree("b", "2"));
 
-        assertThat(t.metae(), contains(meta("a", "1")));
-        assertThat(t.children(), contains(tree("b", "2")));
+        assertThat("metae", t.metae(), contains(meta("a", "1")));
+        assertThat("children", t.children(), contains(tree("b", "2")));
     }
 
     @Test

@@ -34,6 +34,7 @@ Version History
 
 ### Upcoming Changes
 
+- A tree node may now contain both text and meta data
 - `tree()` accepts arrays and collections of its arguments and will flatten
 them. This is useful when splitting tree construction into helper methods
 - Renamed `Tree.content()` to `Tree.text()`

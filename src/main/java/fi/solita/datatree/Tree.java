@@ -13,30 +13,20 @@ public final class Tree extends TreeOrMeta {
     private final List<Meta> metae;
     private final List<Tree> children;
 
-    public static Tree tree(String name) {
-        return new Tree(name, "");
-    }
-
-    public static Tree tree(String name, String text) {
-        return new Tree(name, text);
-    }
-
-    public static Tree tree(String name, Object... metaeOrChildren) {
-        // TODO: add support for String content being defined using this method; concatenate or allow mixing text with elements as in xml?
-        return new Tree(name, "", Util.flatten(metaeOrChildren));
+    public static Tree tree(String name, Object... content) {
+        return new Tree(name, Util.flatten(content));
     }
 
     public static Meta meta(String name, String value) {
         return new Meta(name, value);
     }
 
-    private Tree(String name, String text, TreeOrMeta... metaeOrChildren) {
+    private Tree(String name, Object[] content) {
         Objects.requireNonNull(name, "name must be non-null");
-        Objects.requireNonNull(text, "text must be non-null");
         this.name = name;
-        this.text = text;
-        this.metae = Util.filterMeta(metaeOrChildren);
-        this.children = Util.filterTree(metaeOrChildren);
+        this.text = Util.filterOneString(content);
+        this.metae = Util.filterMeta(content);
+        this.children = Util.filterTree(content);
     }
 
     public String name() {
