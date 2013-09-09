@@ -8,11 +8,11 @@
 				http://stackoverflow.com/questions/2290360/xsd-how-to-allow-elements-in-any-order-any-number-of-times
 					-> requires XSD 1.1, see http://www.w3.org/TR/xmlschema11-1/#ch_models
 		OK - spike schema construction syntax
-		!! - if spike successful, resolve TODOs in Tree
+		OK - if spike successful, resolve TODOs in Tree
 			OK - rename content() to text()
-			- flattening: support collections/iterables instead of just arrays
-			- support text with meta, but not text with children
-			- only one text string, no concatenation (for now)
+			OK - flattening: support collections/iterables instead of just arrays
+			OK - support text with meta, but not text with children
+			OK - only one text string, no concatenation (for now)
 		- manually written rules
 		- read rules automatically from validation annotated fields
 		- generate XML schema
