@@ -13,10 +13,25 @@ public final class Tree {
     private final List<Meta> metae;
     private final List<Tree> children;
 
+    /**
+     * Constructs a tree node. Tree nodes correspond to XML elements.
+     *
+     * @param name    name of this tree node. Should be a valid XML element name.
+     * @param content {@link String}, {@link Tree} or {@link Meta} instances,
+     *                or arrays or {@link Collection}s containing them.
+     *                The following restrictions apply:
+     *                <ul>
+     *                <li>At most one {@code String} is allowed</li>
+     *                <li>{@code String} and {@code Tree} cannot coexist</li>
+     *                </ul>
+     */
     public static Tree tree(String name, Object... content) {
         return new Tree(name, Util.flatten(content));
     }
 
+    /**
+     * Constructs a meta node. Meta nodes correspond to XML attributes.
+     */
     public static Meta meta(String name, String value) {
         return new Meta(name, value);
     }
