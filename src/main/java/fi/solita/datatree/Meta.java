@@ -6,7 +6,7 @@ package fi.solita.datatree;
 
 import java.util.Objects;
 
-public final class Meta extends TreeOrMeta {
+public final class Meta {
 
     private final String name;
     private final String value;
