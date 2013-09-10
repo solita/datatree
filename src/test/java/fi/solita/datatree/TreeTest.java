@@ -35,12 +35,6 @@ public class TreeTest {
     }
 
     @Test
-    public void content_cannot_be_null() {
-        thrown.expect(NullPointerException.class);
-        tree("name", (Object) null);
-    }
-
-    @Test
     public void may_have_text() {
         Tree t = tree("name", "text");
 
@@ -119,6 +113,12 @@ public class TreeTest {
                         tree("b"),
                         tree("c"),
                         tree("d"))));
+    }
+
+    @Test
+    public void fill_flatten_null_arguments_as_if_they_were_empty_collections() {
+        assertThat("null item", tree("root", (Object) null), is(tree("root")));
+        assertThat("null list", tree("root", (Object[]) null), is(tree("root")));
     }
 
     @Test

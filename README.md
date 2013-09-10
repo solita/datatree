@@ -41,6 +41,12 @@ a namespace-aware XML library. For an example, see `XmlSchemaValidator`.
 Version History
 ---------------
 
+### Upcoming Changes
+
+- `null` in a tree's content does not anymore cause `NullPointerException`,
+but will be ignored silently. We consider `null` to be equivalent to an empty
+list, the same way as Clojure's `nil`
+
 ### DataTree 0.3.0 (2013-09-10)
 
 - `XmlSchema` class with helper methods for generating XSD files

@@ -9,9 +9,14 @@ import java.util.*;
 class Util {
 
     public static Object[] flatten(Object[] xs) {
+        if (xs == null) {
+            return new Object[0];
+        }
         List<Object> results = new ArrayList<>();
         for (Object x : xs) {
-            if (x.getClass().isArray()) {
+            if (x == null) {
+                // we consider null to be equivalent to an empty list, the same way as Clojure's nil
+            } else if (x.getClass().isArray()) {
                 Collections.addAll(results, flatten((Object[]) x));
             } else if (x instanceof Collection) {
                 Collection<?> coll = (Collection<?>) x;
