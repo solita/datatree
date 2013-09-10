@@ -37,6 +37,10 @@ public class XmlSchema {
         return meta("maxOccurs", n == UNBOUNDED ? "unbounded" : String.valueOf(n));
     }
 
+    public static Meta minOccurs(int n) {
+        return meta("minOccurs", String.valueOf(n));
+    }
+
 
     // Attributes
 
@@ -92,5 +96,9 @@ public class XmlSchema {
             enumeration.add(tree("xs:enumeration", meta("value", value)));
         }
         return enumeration;
+    }
+
+    public static Tree pattern(String value) {
+        return tree("xs:pattern", meta("value", value));
     }
 }
