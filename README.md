@@ -23,7 +23,7 @@ Get this library from Maven Central using the following dependency:
 </dependency>
 ```
 
-Add static imports for the factory methods in the Tree class:
+Add static imports for the factory methods in the [`Tree`][Tree] class:
 
 ```
 import static fi.solita.datatree.Tree.*;
@@ -32,11 +32,11 @@ import static fi.solita.datatree.Tree.*;
 Now you can describe an XML document as a series of nested calls to `tree` and
 `meta`. Here are some examples:
 
-`tree("element", "some text")` corresponds `<element>some text</element>`
+`tree("element", "some text")` becomes `<element>some text</element>`
 
-`tree("element", meta("attribute", "value"))` corresponds `<element attribute="value"/>`
+`tree("element", meta("attribute", "value"))` becomes `<element attribute="value"/>`
 
-`tree("outer", tree("inner-1"), tree("inner-2"))` corresponds `<outer><inner-1/><inner-2/></outer>`
+`tree("outer", tree("inner-1"), tree("inner-2"))` becomes `<outer><inner-1/><inner-2/></outer>`
 
 To convert a tree into XML, you can do this:
 
@@ -44,11 +44,13 @@ To convert a tree into XML, you can do this:
 XmlDocumentGenerator.toXml(tree("some-tree"), new StreamResult(outputStream));
 ```
 
+[Tree]: https://github.com/solita/datatree/blob/master/src/main/java/fi/solita/datatree/Tree.java
+
 
 ### Creating XML Schemas
 
-There are helper methods in `XmlSchema` for generating XML Schemas. First do a
-static import for them:
+There are helper methods in [`XmlSchema`][XmlSchema] for generating XML
+Schemas. First do a static import for them:
 
 ```
 import static fi.solita.datatree.xml.XmlSchema.*;
@@ -64,6 +66,8 @@ XmlSchemaValidator.validate(schema, document);
 
 There are not yet helper methods for every XML Schema element and attribute.
 Maybe later. Create a pull request if you want to add something there.
+
+[XmlSchema]: https://github.com/solita/datatree/blob/master/src/main/java/fi/solita/datatree/xml/XmlSchema.java
 
 
 Why yet another XML library?
