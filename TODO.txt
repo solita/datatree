@@ -1,6 +1,6 @@
 
-!! - generating XML schemas
-	!! - walking skeleton for the following validations:
+OK - generating XML schemas
+	OK - walking skeleton for the following validations:
 			* has element exactly 1 times
 			* has element 1 or more times
 			* has the desired elements, in any order
@@ -13,8 +13,10 @@
 			OK - flattening: support collections/iterables instead of just arrays
 			OK - support text with meta, but not text with children
 			OK - only one text string, no concatenation (for now)
-		- manually written rules
-		- read rules automatically from validation annotated fields
-		- generate XML schema
-		- API-level validation should fail iff XML schema validation fails
-	- find out what types and validation rules are required by our (immediate) use case
+		OK - manually written rules
+		SKIP - read rules automatically from validation annotated fields
+		OK - generate XML schema
+		SKIP - API-level validation should fail iff XML schema validation fails
+	OK - find out what types and validation rules are required by our (immediate) use case
+- tests for the methods in XmlSchema
+- helper methods for all XML Schema elements and attributes
