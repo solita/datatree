@@ -32,6 +32,10 @@ our model objects already had.
 Version History
 ---------------
 
+### Upcoming Changes
+
+- `XmlSchema` class with helper methods for generating XSD files
+
 ### DataTree 0.2.0 (2013-09-09)
 
 - A tree node may now contain both text and meta data
