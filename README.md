@@ -46,6 +46,8 @@ Version History
 - `null` in a tree's content does not anymore cause `NullPointerException`,
 but will be ignored silently. We consider `null` to be equivalent to an empty
 list, the same way as Clojure's `nil`
+- Will throw an `IllegalArgumentException` if trying to put something other
+than String, Tree or Meta instances into a tree
 
 ### DataTree 0.3.0 (2013-09-10)
 

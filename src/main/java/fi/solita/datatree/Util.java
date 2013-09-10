@@ -26,8 +26,17 @@ class Util {
                 flatten(results, x);
             }
         } else {
+            checkIfAllowedType(item);
             results.add(item);
         }
+    }
+
+    private static void checkIfAllowedType(Object item) {
+        Class<?> c = item.getClass();
+        if (c == String.class || c == Tree.class || c == Meta.class) {
+            return;
+        }
+        throw new IllegalArgumentException("Cannot contain " + c.getName() + " instances; tried to add " + item);
     }
 
     public static String filterOneString(Object[] xs) {
