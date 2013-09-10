@@ -12,7 +12,7 @@ This project is available in Maven Central using the following dependency:
 <dependency>
     <groupId>fi.solita.datatree</groupId>
     <artifactId>datatree</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
@@ -41,7 +41,7 @@ a namespace-aware XML library. For an example, see `XmlSchemaValidator`.
 Version History
 ---------------
 
-### Upcoming Changes
+### DataTree 0.4.0 (2013-09-10)
 
 - `null` in a tree's content does not anymore cause `NullPointerException`,
 but will be ignored silently. We consider `null` to be equivalent to an empty
