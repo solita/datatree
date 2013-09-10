@@ -86,7 +86,10 @@ Known Limitations
 `XmlDocumentGenerator.toDocument` does not produce namespace-aware documents.
 As a workaround, convert the tree to XML bytes using
 `XmlDocumentGenerator.toXml` and `StreamResult`, which can then be read using
-a namespace-aware XML library. For an example, see `XmlSchemaValidator`.
+a namespace-aware XML library. For an example, see
+[`XmlSchemaValidator`][XmlSchemaValidator].
+
+[XmlSchemaValidator]: https://github.com/solita/datatree/blob/master/src/main/java/fi/solita/datatree/xml/XmlSchemaValidator.java
 
 
 Version History
