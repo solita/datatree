@@ -29,6 +29,15 @@ the XML Schemas without duplicating the Bean Validation annotations that
 our model objects already had.
 
 
+Known Limitations
+-----------------
+
+`XmlDocumentGenerator.toDocument` does not produce namespace-aware documents.
+As a workaround, convert the tree to XML bytes using
+`XmlDocumentGenerator.toXml` and `StreamResult`, which can then be read using
+a namespace-aware XML library. For an example, see `XmlSchemaValidator`.
+
+
 Version History
 ---------------
 

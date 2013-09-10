@@ -1,3 +1,4 @@
 
 - tests for the methods in XmlSchema
 - helper methods for all XML Schema elements and attributes
+- XmlDocumentGenerator#toDocument doesn't support namespaces (it would have to use createElementNS, but subtrees don't know the namespaceURI)
