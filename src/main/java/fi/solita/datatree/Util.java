@@ -9,23 +9,25 @@ import java.util.*;
 class Util {
 
     public static Object[] flatten(Object[] xs) {
-        if (xs == null) {
-            return new Object[0];
-        }
         List<Object> results = new ArrayList<>();
-        for (Object x : xs) {
-            if (x == null) {
-                // we consider null to be equivalent to an empty list, the same way as Clojure's nil
-            } else if (x.getClass().isArray()) {
-                Collections.addAll(results, flatten((Object[]) x));
-            } else if (x instanceof Collection) {
-                Collection<?> coll = (Collection<?>) x;
-                Collections.addAll(results, flatten(coll.toArray()));
-            } else {
-                results.add(x);
-            }
-        }
+        flatten(results, xs);
         return results.toArray(new Object[results.size()]);
+    }
+
+    private static void flatten(List<Object> results, Object item) {
+        if (item == null) {
+            // ignore; we consider null to be equivalent to an empty list, the same way as Clojure's nil
+        } else if (item.getClass().isArray()) {
+            Object[] xs = (Object[]) item;
+            flatten(results, Arrays.asList(xs));
+        } else if (item instanceof Collection) {
+            Collection<?> xs = (Collection<?>) item;
+            for (Object x : xs) {
+                flatten(results, x);
+            }
+        } else {
+            results.add(item);
+        }
     }
 
     public static String filterOneString(Object[] xs) {
