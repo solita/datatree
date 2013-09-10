@@ -2,7 +2,8 @@
 DataTree
 ========
 
-Simple way to generate XML documents and XML Schemas using Java.
+Simple way to generate XML documents and XML Schemas using Java, but *feeling
+like Clojure.*
 
 Requires Java 7 or greater.
 
