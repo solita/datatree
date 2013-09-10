@@ -16,3 +16,5 @@ mvn nexus-staging:release \
 
 git push origin HEAD
 git push origin --tags
+
+rm -rf staging
