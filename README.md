@@ -12,7 +12,7 @@ This project is available in Maven Central using the following dependency:
 <dependency>
     <groupId>fi.solita.datatree</groupId>
     <artifactId>datatree</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
@@ -41,7 +41,7 @@ a namespace-aware XML library. For an example, see `XmlSchemaValidator`.
 Version History
 ---------------
 
-### Upcoming Changes
+### DataTree 0.3.0 (2013-09-10)
 
 - `XmlSchema` class with helper methods for generating XSD files
 
