@@ -11,7 +11,7 @@
 
     <groupId>fi.solita.datatree</groupId>
     <artifactId>datatree</artifactId>
-    <version>0.4.0</version>
+    <version>0.4.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>DataTree</name>
