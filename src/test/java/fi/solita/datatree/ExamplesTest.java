@@ -10,6 +10,7 @@ import org.junit.Test;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
@@ -18,7 +19,7 @@ import java.util.regex.*;
 import static fi.solita.datatree.Tree.*;
 import static fi.solita.datatree.xml.XmlSchema.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.*;
 
 public class ExamplesTest {
 
@@ -62,11 +63,13 @@ public class ExamplesTest {
     }
 
 
-    // Meta tests
+    // tests for the documentation
+
+    public static final Path README = Paths.get("README.md");
 
     @Test
     public void code_samples_in_README_are_in_sync_with_this_example() throws IOException {
-        String readme = read(Paths.get("README.md"));
+        String readme = read(README);
         readme = readme.substring(0, readme.indexOf("Version History")); // ignore old method names etc.
 
         String examples = read(Paths.get("src/test/java").resolve(getClass().getName().replace('.', '/') + ".java"));
@@ -81,11 +84,36 @@ public class ExamplesTest {
         }
     }
 
+    @Test
+    public void links_in_README_are_working() throws Exception {
+        TestEnvironment.assumeSlowTestsEnabled();
+
+        String readme = read(README);
+        for (URL url : findLinks(readme)) {
+            System.out.println("Checking URL: " + url);
+            String status = url.openConnection().getHeaderField("Status");
+
+            assertThat("status of " + url, status, is("200 OK"));
+        }
+    }
+
+
+    // helpers
+
     private static List<String> findCodeSamples(String documentation) {
         Matcher m = Pattern.compile("`(``)?(.*?)`(``)?", Pattern.MULTILINE | Pattern.DOTALL).matcher(documentation);
         List<String> results = new ArrayList<>();
         while (m.find()) {
             results.add(m.group(2).trim());
+        }
+        return results;
+    }
+
+    private static List<URL> findLinks(String documentation) throws MalformedURLException {
+        Matcher m = Pattern.compile("https?://[-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]").matcher(documentation);
+        List<URL> results = new ArrayList<>();
+        while (m.find()) {
+            results.add(new URL(m.group()));
         }
         return results;
     }

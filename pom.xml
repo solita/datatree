@@ -106,6 +106,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12</version>
                 <configuration>
+                    <systemPropertyVariables>
+                        <runSlowTests>true</runSlowTests>
+                    </systemPropertyVariables>
                     <includes>
                         <include>**/*Test.class</include>
                     </includes>
