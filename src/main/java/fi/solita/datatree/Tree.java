@@ -18,7 +18,7 @@ public final class Tree {
      *
      * @param name    name of this tree node. Should be a valid XML element name.
      * @param content {@link String}, {@link Tree} or {@link Meta} instances,
-     *                or arrays or {@link Collection}s containing them.
+     *                or arrays or {@link Iterable}s containing them.
      *                The following restrictions apply:
      *                <ul>
      *                <li>At most one {@code String} is allowed</li>
