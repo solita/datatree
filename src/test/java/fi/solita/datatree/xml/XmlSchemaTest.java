@@ -17,7 +17,7 @@ public class XmlSchemaTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void element_name() throws Exception {
+    public void element_name() {
         Tree schema = schema(element("correct-name"));
 
         XmlSchemaValidator.validate(schema, tree("correct-name"));
@@ -26,7 +26,7 @@ public class XmlSchemaTest {
     }
 
     @Test
-    public void all_elements_in_any_order() throws Exception {
+    public void all_elements_in_any_order() {
         Tree schema = schema(
                 element("root", complexType(all(
                         element("foo"),
@@ -47,7 +47,7 @@ public class XmlSchemaTest {
     }
 
     @Test
-    public void element_max_occurrences() throws Exception {
+    public void element_max_occurrences() {
         // `maxOccurs > 1` inside xs:all requires XSD 1.1, which Java doesn't support out-of-the-box,
         // so we must be satisfied with xs:sequence
 
@@ -71,7 +71,7 @@ public class XmlSchemaTest {
     }
 
     @Test
-    public void attribute_name() throws Exception {
+    public void attribute_name() {
         Tree schema = schema(
                 element("root", complexType(
                         attribute("attr-name"))));
@@ -83,7 +83,7 @@ public class XmlSchemaTest {
     }
 
     @Test
-    public void required_attribute() throws Exception {
+    public void required_attribute() {
         Tree schema = schema(
                 element("root", complexType(
                         attribute("attr-name", required()))));
