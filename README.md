@@ -92,6 +92,10 @@ a namespace-aware XML library. For an example, see `XmlSchemaValidator`.
 Version History
 ---------------
 
+### Upcoming Changes
+
+- In `Tree.toString()`, show meta before text
+
 ### DataTree 0.4.0 (2013-09-10)
 
 - `null` in a tree's content does not anymore cause `NullPointerException`,

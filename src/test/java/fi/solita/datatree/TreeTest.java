@@ -137,6 +137,12 @@ public class TreeTest {
         assertThat("meta", tree("a", meta("m1", "n1"), meta("m2", "n2")).toString(), is("(a {m1 \"n1\"} {m2 \"n2\"})"));
         assertThat("children", tree("a", tree("b"), tree("c")).toString(), is("(a (b) (c))"));
 
+        assertThat("meta is always before text",
+                tree("a",
+                        meta("m", ""),
+                        "text",
+                        meta("n", "")
+                ).toString(), is("(a {m} {n} \"text\")"));
         assertThat("meta is always before children",
                 tree("a",
                         tree("b"),

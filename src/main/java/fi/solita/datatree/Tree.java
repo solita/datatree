@@ -9,9 +9,9 @@ import java.util.*;
 public final class Tree {
 
     private final String name;
-    private final String text;
     private final List<Meta> metae;
     private final List<Tree> children;
+    private final String text;
 
     /**
      * Constructs a tree node. Tree nodes correspond to XML elements.
@@ -39,9 +39,9 @@ public final class Tree {
     private Tree(String name, Object[] content) {
         Objects.requireNonNull(name, "name must be non-null");
         this.name = name;
-        this.text = Util.filterOneString(content);
         this.metae = Util.filterMeta(content);
         this.children = Util.filterTree(content);
+        this.text = Util.filterOneString(content);
         if (!text.isEmpty() && !children.isEmpty()) {
             throw new IllegalArgumentException("Cannot contain both text and trees; " +
                     "had text \"" + text + "\" and children " + children);
@@ -50,10 +50,6 @@ public final class Tree {
 
     public String name() {
         return name;
-    }
-
-    public String text() {
-        return text;
     }
 
     public List<Meta> metae() {
@@ -73,6 +69,10 @@ public final class Tree {
         return children;
     }
 
+    public String text() {
+        return text;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -83,17 +83,17 @@ public final class Tree {
         }
         Tree that = (Tree) obj;
         return this.name.equals(that.name) &&
-                this.text.equals(that.text) &&
                 this.metae.equals(that.metae) &&
-                this.children.equals(that.children);
+                this.children.equals(that.children) &&
+                this.text.equals(that.text);
     }
 
     @Override
     public int hashCode() {
         int result = name.hashCode();
-        result = 31 * result + text.hashCode();
         result = 31 * result + metae.hashCode();
         result = 31 * result + children.hashCode();
+        result = 31 * result + text.hashCode();
         return result;
     }
 
@@ -102,14 +102,14 @@ public final class Tree {
         StringBuilder sb = new StringBuilder();
         sb.append('(');
         sb.append(name);
-        if (!text.isEmpty()) {
-            sb.append(' ').append('"').append(text).append('"');
-        }
         for (Meta meta : metae) {
             sb.append(' ').append(meta.toString());
         }
         for (Tree child : children) {
             sb.append(' ').append(child.toString());
+        }
+        if (!text.isEmpty()) {
+            sb.append(' ').append('"').append(text).append('"');
         }
         sb.append(')');
         return sb.toString();
