@@ -6,7 +6,13 @@ Simple way to generate XML documents and XML Schemas using Java.
 
 Requires Java 7 or greater.
 
-This project is available in Maven Central using the following dependency:
+
+User Guide
+----------
+
+### Getting Started
+
+Get this library from Maven Central using the following dependency:
 
 ```
 <dependency>
@@ -16,17 +22,57 @@ This project is available in Maven Central using the following dependency:
 </dependency>
 ```
 
+Add static imports for the factory methods in the Tree class:
+
+```
+import static fi.solita.datatree.Tree.*;
+```
+
+Now you can describe an XML document as a series of nested calls to `tree` and
+`meta`. Here are some examples:
+
+`tree("element", "some text")` corresponds `<element>some text</element>`
+
+`tree("element", meta("attribute", "value"))` corresponds `<element attribute="value"/>`
+
+`tree("outer", tree("inner-1"), tree("inner-2"))` corresponds `<outer><inner-1/><inner-2/></outer>`
+
+To convert a tree into XML, you can do this:
+
+```
+XmlDocumentGenerator.toXml(tree("some-tree"), new StreamResult(outputStream));
+```
+
+
+### Creating XML Schemas
+
+There are helper methods in `XmlSchema` for generating XML Schemas. First do a
+static import for them:
+
+```
+import static fi.solita.datatree.xml.XmlSchema.*;
+```
+
+And then use those to generate a tree that represents the schema:
+
+```
+Tree schema = schema(element("foo"));
+Tree document = tree("foo");
+XmlSchemaValidator.validate(schema, document);
+```
+
+There are not yet helper methods for every XML Schema element and attribute.
+Maybe later. Create a pull request if you want to add something there.
+
 
 Why yet another XML library?
 ----------------------------
 
-We had to create lots of REST APIs for external consumption, but our
-customer did not allow us to use Clojure and JSON, but instead required us
-to use Java and XML, even producing XML Schemas. We tried to use JAXB for
-about two days. To protect our sanity and to save time, we created this
-library to have a succint syntax for creating XML documents and generating
-the XML Schemas without duplicating the Bean Validation annotations that
-our model objects already had.
+We had to create lots of REST APIs for external consumption, but our customer
+did not allow us to use Clojure and JSON, but instead required us to use Java
+and XML, even producing XML Schemas. We tried to use JAXB for about two days.
+To protect our sanity and to save time, we created this library to have a
+succinct syntax for creating XML documents and XML Schemas.
 
 
 Known Limitations
