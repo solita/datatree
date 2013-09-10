@@ -111,9 +111,14 @@ public class TreeTest {
     }
 
     @Test
-    public void will_flatten_collection_arguments() {
+    public void will_flatten_iterable_arguments() {
         List<Tree> ab = Arrays.asList(tree("a"), tree("b"));
-        Collection<Tree> cd = Collections.unmodifiableCollection(Arrays.asList(tree("c"), tree("d")));
+        Iterable<Tree> cd = new Iterable<Tree>() {
+            @Override
+            public Iterator<Tree> iterator() {
+                return Arrays.asList(tree("c"), tree("d")).iterator();
+            }
+        };
         Tree t = tree("root", ab, cd);
 
         assertThat(t, is(

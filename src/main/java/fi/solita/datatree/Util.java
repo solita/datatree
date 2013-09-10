@@ -20,8 +20,8 @@ class Util {
         } else if (item.getClass().isArray()) {
             Object[] xs = (Object[]) item;
             flatten(results, Arrays.asList(xs));
-        } else if (item instanceof Collection) {
-            Collection<?> xs = (Collection<?>) item;
+        } else if (item instanceof Iterable) {
+            Iterable<?> xs = (Iterable<?>) item;
             for (Object x : xs) {
                 flatten(results, x);
             }

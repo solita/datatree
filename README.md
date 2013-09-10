@@ -94,6 +94,7 @@ Version History
 
 ### Upcoming Changes
 
+- `tree()` will flatten also `Iterable` arguments
 - In `Tree.toString()`, show meta before text
 
 ### DataTree 0.4.0 (2013-09-10)
