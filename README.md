@@ -19,7 +19,7 @@ Get this library from Maven Central using the following dependency:
 <dependency>
     <groupId>fi.solita.datatree</groupId>
     <artifactId>datatree</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
@@ -92,7 +92,7 @@ a namespace-aware XML library. For an example, see `XmlSchemaValidator`.
 Version History
 ---------------
 
-### Upcoming Changes
+### DataTree 0.5.0 (2013-09-10)
 
 - `tree()` will flatten also `Iterable` arguments
 - In `Tree.toString()`, show meta before text
