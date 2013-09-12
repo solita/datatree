@@ -12,7 +12,7 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.*;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.validation.*;
 import java.io.*;
 
@@ -29,12 +29,16 @@ public class XmlSchemaValidator {
             ByteArrayOutputStream schemaBytes = new ByteArrayOutputStream();
             XmlDocumentGenerator.toXml(schema, new StreamResult(schemaBytes));
 
+            // TODO: remove debug code
             System.out.println("-- from bytes");
             debug(readDoc(schemaBytes));
             System.out.println("-- from tree");
             debug(XmlDocumentGenerator.toDocument(schema));
 
-            validate(new StreamSource(new ByteArrayInputStream(schemaBytes.toByteArray())), subject);
+            //StreamSource source = new StreamSource(new ByteArrayInputStream(schemaBytes.toByteArray()));
+            DOMSource source = new DOMSource(XmlDocumentGenerator.toDocument(schema));
+
+            validate(source, subject);
         } catch (TransformerException e) {
             throw new ValidationException(e);
         }
