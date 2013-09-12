@@ -1,4 +1,9 @@
 
+!! - XmlDocumentGenerator#toDocument doesn't support namespaces (it would have to use createElementNS, but subtrees don't know the namespaceURI)
+	OK - namespaces for elements
+	OK - namespaces for xmlns attribute
+	!! - compare document equality against Java's XML parser (with namespace awareness enabled)
+	- namespaces for attributes
+	- don't create empty text nodes
 - tests for the methods in XmlSchema
 - helper methods for all XML Schema elements and attributes
-- XmlDocumentGenerator#toDocument doesn't support namespaces (it would have to use createElementNS, but subtrees don't know the namespaceURI)
