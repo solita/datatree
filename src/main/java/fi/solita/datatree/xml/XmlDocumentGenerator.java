@@ -34,7 +34,27 @@ public class XmlDocumentGenerator {
      * Makes {@code tree} a child node of {@code parent}.
      */
     public static void appendElement(Document document, Node parent, Tree tree) {
-        Element current = document.createElement(tree.name());
+        String tagName = tree.name();
+
+        String prefix;
+        if (tagName.contains(":")) {
+            String[] parts = tagName.split(":", 2);
+            prefix = parts[0];
+        } else {
+            prefix = null;
+        }
+
+        String ns;
+        if (prefix != null) {
+            ns = tree.meta("xmlns:" + prefix);
+        } else {
+            ns = tree.meta("xmlns");
+        }
+        if (ns.isEmpty() && document.getDocumentElement() != null) {
+            ns = parent.lookupNamespaceURI(prefix);
+        }
+
+        Element current = document.createElementNS(ns, tagName);
         current.appendChild(document.createTextNode(tree.text()));
         parent.appendChild(current);
 

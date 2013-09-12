@@ -5,9 +5,11 @@
 package fi.solita.datatree.xml;
 
 import fi.solita.datatree.Tree;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.*;
@@ -26,9 +28,39 @@ public class XmlSchemaValidator {
         try {
             ByteArrayOutputStream schemaBytes = new ByteArrayOutputStream();
             XmlDocumentGenerator.toXml(schema, new StreamResult(schemaBytes));
+
+            System.out.println("-- from bytes");
+            debug(readDoc(schemaBytes));
+            System.out.println("-- from tree");
+            debug(XmlDocumentGenerator.toDocument(schema));
+
             validate(new StreamSource(new ByteArrayInputStream(schemaBytes.toByteArray())), subject);
         } catch (TransformerException e) {
             throw new ValidationException(e);
+        }
+    }
+
+    private static void debug(Document doc) {
+        System.out.println("doc = " + doc);
+
+        Element e = doc.getDocumentElement();
+        System.out.println("e = " + e);
+        System.out.println("e.getTagName() = " + e.getTagName());
+        System.out.println("e.getLocalName() = " + e.getLocalName());
+        System.out.println("e.getNamespaceURI() = " + e.getNamespaceURI());
+
+        Attr attr = (Attr) e.getAttributes().item(0);
+        System.out.println("e.getAttributes().item(0) = " + attr);
+        System.out.println("attr.getName() = " + attr.getName());
+        System.out.println("attr.getLocalName() = " + attr.getLocalName());
+        System.out.println("attr.getNamespaceURI() = " + attr.getNamespaceURI());
+    }
+
+    private static Document readDoc(ByteArrayOutputStream schemaBytes) {
+        try {
+            return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(schemaBytes.toByteArray()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

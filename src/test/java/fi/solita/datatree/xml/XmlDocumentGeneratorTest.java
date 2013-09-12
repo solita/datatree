@@ -6,6 +6,7 @@ package fi.solita.datatree.xml;
 
 import fi.solita.datatree.Tree;
 import org.junit.Test;
+import org.w3c.dom.Element;
 
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
@@ -49,6 +50,98 @@ public class XmlDocumentGeneratorTest {
                         meta("a", "1"),
                         meta("b", "2"))),
                 is(HEADER + "<root a=\"1\" b=\"2\"/>"));
+    }
+
+    @Test
+    public void default_namespace_set_in_current_node() {
+        Tree t = tree("root",
+                meta("xmlns", "http://foo"));
+
+        Element root = XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement();
+
+        assertLocalNamePrefixNamespace(root, "root", null, "http://foo");
+    }
+
+    @Test
+    public void prefixed_namespace_set_in_current_node() {
+        Tree t = tree("f:root",
+                meta("xmlns:f", "http://foo"));
+
+        Element root = XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement();
+
+        assertLocalNamePrefixNamespace(root, "root", "f", "http://foo");
+    }
+
+    @Test
+    public void default_namespace_set_in_parent_node() {
+        Tree t = tree("parent",
+                meta("xmlns", "http://foo"),
+                tree("child"));
+
+        Element child = (Element) XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement()
+                .getChildNodes().item(1);
+
+        assertLocalNamePrefixNamespace(child, "child", null, "http://foo");
+    }
+
+    @Test
+    public void prefixed_namespace_set_in_parent_node() {
+        Tree t = tree("f:parent",
+                meta("xmlns:f", "http://foo"),
+                tree("f:child"));
+
+        Element child = (Element) XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement()
+                .getChildNodes().item(1);
+
+        assertLocalNamePrefixNamespace(child, "child", "f", "http://foo");
+    }
+
+    @Test
+    public void default_namespace_overloaded_in_parent_node() {
+        Tree t = tree("root",
+                meta("xmlns", "http://original"),
+                tree("parent",
+                        meta("xmlns", "http://overloaded"),
+                        tree("child")));
+
+        Element child = (Element) XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement()
+                .getChildNodes().item(1)
+                .getChildNodes().item(1);
+
+        assertLocalNamePrefixNamespace(child, "child", null, "http://overloaded");
+    }
+
+    @Test
+    public void prefixed_namespace_overloaded_in_parent_node() {
+        Tree t = tree("f:root",
+                meta("xmlns:f", "http://original"),
+                tree("f:parent",
+                        meta("xmlns:f", "http://overloaded"),
+                        tree("f:child")));
+
+        Element child = (Element) XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement()
+                .getChildNodes().item(1)
+                .getChildNodes().item(1);
+
+        assertLocalNamePrefixNamespace(child, "child", "f", "http://overloaded");
+    }
+
+
+    private static void assertLocalNamePrefixNamespace(Element child, String localName, String prefix, String namespace) {
+        assertThat("local name", child.getLocalName(), is(localName));
+        assertThat("prefix", child.getPrefix(), is(prefix));
+        assertThat("namespace URI", child.getNamespaceURI(), is(namespace));
+        if (prefix == null) {
+            assertThat("tag name", child.getTagName(), is(localName));
+        } else {
+            assertThat("tag name", child.getTagName(), is(prefix + ":" + localName));
+        }
     }
 
     private static String toXml(Tree tree) {
