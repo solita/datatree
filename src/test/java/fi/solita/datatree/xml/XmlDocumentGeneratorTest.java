@@ -6,7 +6,7 @@ package fi.solita.datatree.xml;
 
 import fi.solita.datatree.Tree;
 import org.junit.Test;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
 
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
@@ -132,6 +132,36 @@ public class XmlDocumentGeneratorTest {
         assertLocalNamePrefixNamespace(child, "child", "f", "http://overloaded");
     }
 
+    @Test
+    public void sets_the_namespace_for_default_xmlns_attribute() {
+        Tree t = tree("root", meta("xmlns", "http://foo"));
+
+        Attr attr = XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement()
+                .getAttributeNode("xmlns");
+
+        assertQNameLNameNS(attr, "xmlns", "xmlns", "http://www.w3.org/2000/xmlns/");
+    }
+
+    @Test
+    public void sets_the_namespace_for_prefixed_xmlns_attribute() {
+        Tree t = tree("root", meta("xmlns:foo", "http://foo"));
+
+        Attr attr = XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement()
+                .getAttributeNode("xmlns:foo");
+
+        assertQNameLNameNS(attr, "xmlns:foo", "foo", "http://www.w3.org/2000/xmlns/");
+    }
+
+    // TODO: namespaces of other attributes
+
+
+    private static void assertQNameLNameNS(Attr attr, String name, String localName, String namespace) {
+        assertThat(attr.getName(), is(name));
+        assertThat(attr.getLocalName(), is(localName));
+        assertThat(attr.getNamespaceURI(), is(namespace));
+    }
 
     private static void assertLocalNamePrefixNamespace(Element child, String localName, String prefix, String namespace) {
         assertThat("local name", child.getLocalName(), is(localName));

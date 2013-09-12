@@ -7,6 +7,7 @@ package fi.solita.datatree.xml;
 import fi.solita.datatree.*;
 import org.w3c.dom.*;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
@@ -59,7 +60,12 @@ public class XmlDocumentGenerator {
         parent.appendChild(current);
 
         for (Meta meta : tree.metae()) {
-            current.setAttribute(meta.name(), meta.value());
+            String name = meta.name();
+            String attrNs = null;
+            if (name.equals(XMLConstants.XMLNS_ATTRIBUTE) || name.startsWith(XMLConstants.XMLNS_ATTRIBUTE + ":")) {
+                attrNs = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+            }
+            current.setAttributeNS(attrNs, name, meta.value());
         }
         for (Tree child : tree.children()) {
             appendElement(document, current, child);

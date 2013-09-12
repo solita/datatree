@@ -9,7 +9,7 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.*;
@@ -54,11 +54,23 @@ public class XmlSchemaValidator {
         System.out.println("attr.getName() = " + attr.getName());
         System.out.println("attr.getLocalName() = " + attr.getLocalName());
         System.out.println("attr.getNamespaceURI() = " + attr.getNamespaceURI());
+
+        NodeList childNodes = e.getChildNodes();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node child = childNodes.item(i);
+            System.out.println("child = " + child);
+            System.out.println("child.getNodeName() = " + child.getNodeName());
+            System.out.println("child.getLocalName() = " + child.getLocalName());
+            System.out.println("child.getNamespaceURI() = " + child.getNamespaceURI());
+        }
     }
 
     private static Document readDoc(ByteArrayOutputStream schemaBytes) {
         try {
-            return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(schemaBytes.toByteArray()));
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            return builder.parse(new ByteArrayInputStream(schemaBytes.toByteArray()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
