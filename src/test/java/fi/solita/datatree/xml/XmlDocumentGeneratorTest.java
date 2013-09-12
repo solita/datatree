@@ -72,7 +72,7 @@ public class XmlDocumentGeneratorTest {
         Element root = XmlDocumentGenerator.toDocument(t)
                 .getDocumentElement();
 
-        assertLocalNamePrefixNamespace(root, "root", null, "http://foo");
+        assertQNameLNameNS(root, "root", "root", "http://foo");
         testAgainstReferenceImpl(t);
     }
 
@@ -84,7 +84,7 @@ public class XmlDocumentGeneratorTest {
         Element root = XmlDocumentGenerator.toDocument(t)
                 .getDocumentElement();
 
-        assertLocalNamePrefixNamespace(root, "root", "f", "http://foo");
+        assertQNameLNameNS(root, "f:root", "root", "http://foo");
         testAgainstReferenceImpl(t);
     }
 
@@ -98,7 +98,7 @@ public class XmlDocumentGeneratorTest {
                 .getDocumentElement()
                 .getChildNodes().item(0);
 
-        assertLocalNamePrefixNamespace(child, "child", null, "http://foo");
+        assertQNameLNameNS(child, "child", "child", "http://foo");
         testAgainstReferenceImpl(t);
     }
 
@@ -112,7 +112,7 @@ public class XmlDocumentGeneratorTest {
                 .getDocumentElement()
                 .getChildNodes().item(0);
 
-        assertLocalNamePrefixNamespace(child, "child", "f", "http://foo");
+        assertQNameLNameNS(child, "f:child", "child", "http://foo");
         testAgainstReferenceImpl(t);
     }
 
@@ -129,7 +129,7 @@ public class XmlDocumentGeneratorTest {
                 .getChildNodes().item(0)
                 .getChildNodes().item(0);
 
-        assertLocalNamePrefixNamespace(child, "child", null, "http://overloaded");
+        assertQNameLNameNS(child, "child", "child", "http://overloaded");
         testAgainstReferenceImpl(t);
     }
 
@@ -146,7 +146,7 @@ public class XmlDocumentGeneratorTest {
                 .getChildNodes().item(0)
                 .getChildNodes().item(0);
 
-        assertLocalNamePrefixNamespace(child, "child", "f", "http://overloaded");
+        assertQNameLNameNS(child, "f:child", "child", "http://overloaded");
         testAgainstReferenceImpl(t);
     }
 
@@ -177,23 +177,10 @@ public class XmlDocumentGeneratorTest {
     // TODO: namespaces of other attributes
 
 
-    private static void assertQNameLNameNS(Attr attr, String nodeName, String localName, String namespace) {
-        assertThat("node name", attr.getNodeName(), is(nodeName));
-        assertThat("local name", attr.getLocalName(), is(localName));
-        assertThat("namespace URI", attr.getNamespaceURI(), is(namespace));
-    }
-
-    private static void assertLocalNamePrefixNamespace(Element element, String localName, String prefix, String namespace) {
-        assertThat("local name", element.getLocalName(), is(localName));
-        assertThat("prefix", element.getPrefix(), is(prefix));
-        assertThat("namespace URI", element.getNamespaceURI(), is(namespace));
-        if (prefix == null) {
-            assertThat("node name", element.getNodeName(), is(localName));
-            assertThat("tag name", element.getTagName(), is(localName));
-        } else {
-            assertThat("node name", element.getNodeName(), is(prefix + ":" + localName));
-            assertThat("tag name", element.getTagName(), is(prefix + ":" + localName));
-        }
+    private static void assertQNameLNameNS(Node node, String nodeName, String localName, String namespace) {
+        assertThat("node name", node.getNodeName(), is(nodeName));
+        assertThat("local name", node.getLocalName(), is(localName));
+        assertThat("namespace URI", node.getNamespaceURI(), is(namespace));
     }
 
     private static void testAgainstReferenceImpl(Tree tree) throws Exception {
