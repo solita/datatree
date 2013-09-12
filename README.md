@@ -95,6 +95,10 @@ a namespace-aware XML library. For an example, see
 Version History
 ---------------
 
+### Upcoming Changes
+
+- `XmlDocumentGenerator.toDocument()` won't anymore produce empty text nodes
+
 ### DataTree 0.5.0 (2013-09-10)
 
 - `tree()` will flatten also `Iterable` arguments

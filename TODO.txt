@@ -4,6 +4,6 @@
 	OK - namespaces for xmlns attribute
 	!! - compare document equality against Java's XML parser (with namespace awareness enabled)
 	- namespaces for attributes
-	- don't create empty text nodes
+	OK - don't create empty text nodes
 - tests for the methods in XmlSchema
 - helper methods for all XML Schema elements and attributes

@@ -56,8 +56,12 @@ public class XmlDocumentGenerator {
         }
 
         Element current = document.createElementNS(ns, tagName);
-        current.appendChild(document.createTextNode(tree.text()));
         parent.appendChild(current);
+
+        String text = tree.text();
+        if (!text.isEmpty()) {
+            current.appendChild(document.createTextNode(text));
+        }
 
         for (Meta meta : tree.metae()) {
             String name = meta.name();

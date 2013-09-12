@@ -53,6 +53,16 @@ public class XmlDocumentGeneratorTest {
     }
 
     @Test
+    public void there_are_no_empty_text_nodes() {
+        Tree t = tree("root", "");
+
+        Element root = XmlDocumentGenerator.toDocument(t).getDocumentElement();
+
+        assertThat(root.getNodeName(), is("root"));
+        assertThat("child nodes", root.getChildNodes().getLength(), is(0));
+    }
+
+    @Test
     public void default_namespace_set_in_current_node() {
         Tree t = tree("root",
                 meta("xmlns", "http://foo"));
@@ -82,7 +92,7 @@ public class XmlDocumentGeneratorTest {
 
         Element child = (Element) XmlDocumentGenerator.toDocument(t)
                 .getDocumentElement()
-                .getChildNodes().item(1);
+                .getChildNodes().item(0);
 
         assertLocalNamePrefixNamespace(child, "child", null, "http://foo");
     }
@@ -95,7 +105,7 @@ public class XmlDocumentGeneratorTest {
 
         Element child = (Element) XmlDocumentGenerator.toDocument(t)
                 .getDocumentElement()
-                .getChildNodes().item(1);
+                .getChildNodes().item(0);
 
         assertLocalNamePrefixNamespace(child, "child", "f", "http://foo");
     }
@@ -110,8 +120,8 @@ public class XmlDocumentGeneratorTest {
 
         Element child = (Element) XmlDocumentGenerator.toDocument(t)
                 .getDocumentElement()
-                .getChildNodes().item(1)
-                .getChildNodes().item(1);
+                .getChildNodes().item(0)
+                .getChildNodes().item(0);
 
         assertLocalNamePrefixNamespace(child, "child", null, "http://overloaded");
     }
@@ -126,8 +136,8 @@ public class XmlDocumentGeneratorTest {
 
         Element child = (Element) XmlDocumentGenerator.toDocument(t)
                 .getDocumentElement()
-                .getChildNodes().item(1)
-                .getChildNodes().item(1);
+                .getChildNodes().item(0)
+                .getChildNodes().item(0);
 
         assertLocalNamePrefixNamespace(child, "child", "f", "http://overloaded");
     }
