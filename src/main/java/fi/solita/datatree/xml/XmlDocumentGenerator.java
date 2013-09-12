@@ -35,27 +35,10 @@ public class XmlDocumentGenerator {
      * Makes {@code tree} a child node of {@code parent}.
      */
     public static void appendElement(Document document, Node parent, Tree tree) {
-        String tagName = tree.name();
-
-        String prefix;
-        if (tagName.contains(":")) {
-            String[] parts = tagName.split(":", 2);
-            prefix = parts[0];
-        } else {
-            prefix = null;
-        }
-
-        String ns;
-        if (prefix != null) {
-            ns = tree.meta("xmlns:" + prefix);
-        } else {
-            ns = tree.meta("xmlns");
-        }
-        if (ns.isEmpty() && document.getDocumentElement() != null) {
-            ns = parent.lookupNamespaceURI(prefix);
-        }
-
-        Element current = document.createElementNS(ns, tagName);
+        Element current = document.createElementNS(
+                findNamespace(document, parent, tree, tree.name()),
+                tree.name()
+        );
         parent.appendChild(current);
 
         String text = tree.text();
@@ -64,15 +47,39 @@ public class XmlDocumentGenerator {
         }
 
         for (Meta meta : tree.metae()) {
-            String name = meta.name();
-            String attrNs = null;
-            if (name.equals(XMLConstants.XMLNS_ATTRIBUTE) || name.startsWith(XMLConstants.XMLNS_ATTRIBUTE + ":")) {
-                attrNs = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-            }
-            current.setAttributeNS(attrNs, name, meta.value());
+            current.setAttributeNS(
+                    findNamespace(document, parent, tree, meta.name()),
+                    meta.name(),
+                    meta.value()
+            );
         }
         for (Tree child : tree.children()) {
             appendElement(document, current, child);
         }
+    }
+
+    private static String findNamespace(Document document, Node parent, Tree current, String qname) {
+        if (qname.equals("xmlns") || qname.startsWith("xmlns:")) {
+            return XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+        }
+
+        String prefix;
+        if (qname.contains(":")) {
+            String[] parts = qname.split(":", 2);
+            prefix = parts[0];
+        } else {
+            prefix = null;
+        }
+
+        String ns;
+        if (prefix != null) {
+            ns = current.meta("xmlns:" + prefix);
+        } else {
+            ns = current.meta("xmlns");
+        }
+        if (ns.isEmpty() && document.getDocumentElement() != null) {
+            ns = parent.lookupNamespaceURI(prefix);
+        }
+        return ns;
     }
 }

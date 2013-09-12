@@ -5,7 +5,7 @@
 package fi.solita.datatree.xml;
 
 import fi.solita.datatree.Tree;
-import org.junit.Test;
+import org.junit.*;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -151,7 +151,7 @@ public class XmlDocumentGeneratorTest {
     }
 
     @Test
-    public void sets_the_namespace_for_default_xmlns_attribute() throws Exception {
+    public void namespace_of_default_xmlns_attribute() throws Exception {
         Tree t = tree("root", meta("xmlns", "http://foo"));
 
         Attr attr = XmlDocumentGenerator.toDocument(t)
@@ -163,7 +163,7 @@ public class XmlDocumentGeneratorTest {
     }
 
     @Test
-    public void sets_the_namespace_for_prefixed_xmlns_attribute() throws Exception {
+    public void namespace_of_prefixed_xmlns_attribute() throws Exception {
         Tree t = tree("root", meta("xmlns:foo", "http://foo"));
 
         Attr attr = XmlDocumentGenerator.toDocument(t)
@@ -174,7 +174,63 @@ public class XmlDocumentGeneratorTest {
         testAgainstReferenceImpl(t);
     }
 
-    // TODO: namespaces of other attributes
+    @Test
+    public void namespace_of_unprefixed_attribute_without_default_namespace() throws Exception {
+        Tree t = tree("root",
+                meta("attr", ""));
+
+        Attr attr = XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement()
+                .getAttributeNode("attr");
+
+        assertQNameLNameNS(attr, "attr", "attr", null);
+        testAgainstReferenceImpl(t);
+    }
+
+    @Ignore // TODO
+    @Test
+    public void namespace_of_unprefixed_attribute_with_default_namespace() throws Exception {
+        Tree t = tree("root",
+                meta("attr", ""),
+                meta("xmlns", "http://foo"));
+
+        Attr attr = XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement()
+                .getAttributeNode("attr");
+
+//        assertQNameLNameNS(attr, "attr", "attr", null);
+        testAgainstReferenceImpl(t);
+    }
+
+    @Test
+    public void namespace_of_prefixed_attribute_from_current_element() throws Exception {
+        Tree t = tree("root",
+                meta("foo:attr", ""),
+                meta("xmlns:foo", "http://foo"));
+
+        Attr attr = XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement()
+                .getAttributeNode("foo:attr");
+
+        assertQNameLNameNS(attr, "foo:attr", "attr", "http://foo");
+        testAgainstReferenceImpl(t);
+    }
+
+    @Test
+    public void namespace_of_prefixed_attribute_from_parent_element() throws Exception {
+        Tree t = tree("root",
+                meta("xmlns:foo", "http://foo"),
+                tree("child",
+                        meta("foo:attr", "")));
+
+        Attr attr = ((Element) XmlDocumentGenerator.toDocument(t)
+                .getDocumentElement()
+                .getChildNodes().item(0))
+                .getAttributeNode("foo:attr");
+
+        assertQNameLNameNS(attr, "foo:attr", "attr", "http://foo");
+        testAgainstReferenceImpl(t);
+    }
 
 
     private static void assertQNameLNameNS(Node node, String nodeName, String localName, String namespace) {
@@ -184,13 +240,13 @@ public class XmlDocumentGeneratorTest {
     }
 
     private static void testAgainstReferenceImpl(Tree tree) throws Exception {
-        Document actual = XmlDocumentGenerator.toDocument(tree);
-
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         XmlDocumentGenerator.toXml(tree, new StreamResult(buffer));
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         Document expected = factory.newDocumentBuilder().parse(new ByteArrayInputStream(buffer.toByteArray()));
+
+        Document actual = XmlDocumentGenerator.toDocument(tree);
 
         assertStructurallyEqual(actual, expected);
     }
