@@ -8,9 +8,10 @@ import fi.solita.datatree.Tree;
 import org.junit.Test;
 import org.w3c.dom.*;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
-import java.io.StringWriter;
+import java.io.*;
 
 import static fi.solita.datatree.Tree.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -53,17 +54,18 @@ public class XmlDocumentGeneratorTest {
     }
 
     @Test
-    public void there_are_no_empty_text_nodes() {
+    public void there_are_no_empty_text_nodes() throws Exception {
         Tree t = tree("root", "");
 
         Element root = XmlDocumentGenerator.toDocument(t).getDocumentElement();
 
         assertThat(root.getNodeName(), is("root"));
         assertThat("child nodes", root.getChildNodes().getLength(), is(0));
+        testAgainstReferenceImpl(t);
     }
 
     @Test
-    public void default_namespace_set_in_current_node() {
+    public void default_namespace_set_in_current_node() throws Exception {
         Tree t = tree("root",
                 meta("xmlns", "http://foo"));
 
@@ -71,10 +73,11 @@ public class XmlDocumentGeneratorTest {
                 .getDocumentElement();
 
         assertLocalNamePrefixNamespace(root, "root", null, "http://foo");
+        testAgainstReferenceImpl(t);
     }
 
     @Test
-    public void prefixed_namespace_set_in_current_node() {
+    public void prefixed_namespace_set_in_current_node() throws Exception {
         Tree t = tree("f:root",
                 meta("xmlns:f", "http://foo"));
 
@@ -82,10 +85,11 @@ public class XmlDocumentGeneratorTest {
                 .getDocumentElement();
 
         assertLocalNamePrefixNamespace(root, "root", "f", "http://foo");
+        testAgainstReferenceImpl(t);
     }
 
     @Test
-    public void default_namespace_set_in_parent_node() {
+    public void default_namespace_set_in_parent_node() throws Exception {
         Tree t = tree("parent",
                 meta("xmlns", "http://foo"),
                 tree("child"));
@@ -95,10 +99,11 @@ public class XmlDocumentGeneratorTest {
                 .getChildNodes().item(0);
 
         assertLocalNamePrefixNamespace(child, "child", null, "http://foo");
+        testAgainstReferenceImpl(t);
     }
 
     @Test
-    public void prefixed_namespace_set_in_parent_node() {
+    public void prefixed_namespace_set_in_parent_node() throws Exception {
         Tree t = tree("f:parent",
                 meta("xmlns:f", "http://foo"),
                 tree("f:child"));
@@ -108,10 +113,11 @@ public class XmlDocumentGeneratorTest {
                 .getChildNodes().item(0);
 
         assertLocalNamePrefixNamespace(child, "child", "f", "http://foo");
+        testAgainstReferenceImpl(t);
     }
 
     @Test
-    public void default_namespace_overloaded_in_parent_node() {
+    public void default_namespace_overloaded_in_parent_node() throws Exception {
         Tree t = tree("root",
                 meta("xmlns", "http://original"),
                 tree("parent",
@@ -124,10 +130,11 @@ public class XmlDocumentGeneratorTest {
                 .getChildNodes().item(0);
 
         assertLocalNamePrefixNamespace(child, "child", null, "http://overloaded");
+        testAgainstReferenceImpl(t);
     }
 
     @Test
-    public void prefixed_namespace_overloaded_in_parent_node() {
+    public void prefixed_namespace_overloaded_in_parent_node() throws Exception {
         Tree t = tree("f:root",
                 meta("xmlns:f", "http://original"),
                 tree("f:parent",
@@ -140,10 +147,11 @@ public class XmlDocumentGeneratorTest {
                 .getChildNodes().item(0);
 
         assertLocalNamePrefixNamespace(child, "child", "f", "http://overloaded");
+        testAgainstReferenceImpl(t);
     }
 
     @Test
-    public void sets_the_namespace_for_default_xmlns_attribute() {
+    public void sets_the_namespace_for_default_xmlns_attribute() throws Exception {
         Tree t = tree("root", meta("xmlns", "http://foo"));
 
         Attr attr = XmlDocumentGenerator.toDocument(t)
@@ -151,10 +159,11 @@ public class XmlDocumentGeneratorTest {
                 .getAttributeNode("xmlns");
 
         assertQNameLNameNS(attr, "xmlns", "xmlns", "http://www.w3.org/2000/xmlns/");
+        testAgainstReferenceImpl(t);
     }
 
     @Test
-    public void sets_the_namespace_for_prefixed_xmlns_attribute() {
+    public void sets_the_namespace_for_prefixed_xmlns_attribute() throws Exception {
         Tree t = tree("root", meta("xmlns:foo", "http://foo"));
 
         Attr attr = XmlDocumentGenerator.toDocument(t)
@@ -162,25 +171,64 @@ public class XmlDocumentGeneratorTest {
                 .getAttributeNode("xmlns:foo");
 
         assertQNameLNameNS(attr, "xmlns:foo", "foo", "http://www.w3.org/2000/xmlns/");
+        testAgainstReferenceImpl(t);
     }
 
     // TODO: namespaces of other attributes
 
 
-    private static void assertQNameLNameNS(Attr attr, String name, String localName, String namespace) {
-        assertThat(attr.getName(), is(name));
-        assertThat(attr.getLocalName(), is(localName));
-        assertThat(attr.getNamespaceURI(), is(namespace));
+    private static void assertQNameLNameNS(Attr attr, String nodeName, String localName, String namespace) {
+        assertThat("node name", attr.getNodeName(), is(nodeName));
+        assertThat("local name", attr.getLocalName(), is(localName));
+        assertThat("namespace URI", attr.getNamespaceURI(), is(namespace));
     }
 
-    private static void assertLocalNamePrefixNamespace(Element child, String localName, String prefix, String namespace) {
-        assertThat("local name", child.getLocalName(), is(localName));
-        assertThat("prefix", child.getPrefix(), is(prefix));
-        assertThat("namespace URI", child.getNamespaceURI(), is(namespace));
+    private static void assertLocalNamePrefixNamespace(Element element, String localName, String prefix, String namespace) {
+        assertThat("local name", element.getLocalName(), is(localName));
+        assertThat("prefix", element.getPrefix(), is(prefix));
+        assertThat("namespace URI", element.getNamespaceURI(), is(namespace));
         if (prefix == null) {
-            assertThat("tag name", child.getTagName(), is(localName));
+            assertThat("node name", element.getNodeName(), is(localName));
+            assertThat("tag name", element.getTagName(), is(localName));
         } else {
-            assertThat("tag name", child.getTagName(), is(prefix + ":" + localName));
+            assertThat("node name", element.getNodeName(), is(prefix + ":" + localName));
+            assertThat("tag name", element.getTagName(), is(prefix + ":" + localName));
+        }
+    }
+
+    private static void testAgainstReferenceImpl(Tree tree) throws Exception {
+        Document actual = XmlDocumentGenerator.toDocument(tree);
+
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        XmlDocumentGenerator.toXml(tree, new StreamResult(buffer));
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        Document expected = factory.newDocumentBuilder().parse(new ByteArrayInputStream(buffer.toByteArray()));
+
+        assertStructurallyEqual(actual, expected);
+    }
+
+    private static void assertStructurallyEqual(Node actual, Node expected) {
+        assertThat("node name", actual.getNodeName(), is(expected.getNodeName()));
+        assertThat("node type", actual.getNodeType(), is(expected.getNodeType()));
+        assertThat("node value", actual.getNodeValue(), is(expected.getNodeValue()));
+        assertThat("local name", actual.getLocalName(), is(expected.getLocalName()));
+        assertThat("namespace URI", actual.getNamespaceURI(), is(expected.getNamespaceURI()));
+
+        NamedNodeMap actualAttributes = actual.getAttributes();
+        NamedNodeMap expectedAttributes = expected.getAttributes();
+        assertThat("has attributes", actualAttributes != null, is(expectedAttributes != null));
+        if (expectedAttributes != null && actualAttributes != null) {
+            for (int i = 0; i < expectedAttributes.getLength(); i++) {
+                assertStructurallyEqual(actualAttributes.item(i), expectedAttributes.item(i));
+            }
+        }
+
+        NodeList actualChildren = actual.getChildNodes();
+        NodeList expectedChildren = expected.getChildNodes();
+        assertThat("child nodes", actualChildren.getLength(), is(expectedChildren.getLength()));
+        for (int i = 0; i < expectedChildren.getLength(); i++) {
+            assertStructurallyEqual(actualChildren.item(i), expectedChildren.item(i));
         }
     }
 
