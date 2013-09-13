@@ -9,7 +9,7 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 
 import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 
 import static fi.solita.datatree.Tree.tree;
 import static fi.solita.datatree.xml.XmlSchema.*;
@@ -52,6 +52,6 @@ public class XmlSchemaValidatorTest {
     }
 
     private static Source asSource(Tree tree) {
-        return new DOMSource(XmlDocumentGenerator.toNamespaceAwareDocument(tree));
+        return new StreamSource(XmlGenerator.toInputStream(tree));
     }
 }

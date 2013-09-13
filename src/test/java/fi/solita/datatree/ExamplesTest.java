@@ -25,27 +25,27 @@ public class ExamplesTest {
     public void element_with_text() {
         Tree t = tree("element", "some text");
 
-        assertThat(XmlDocumentGenerator.toString(t), containsString("<element>some text</element>"));
+        assertThat(XmlGenerator.toString(t), containsString("<element>some text</element>"));
     }
 
     @Test
     public void element_with_attributes() {
         Tree t = tree("element", meta("attribute", "value"));
 
-        assertThat(XmlDocumentGenerator.toString(t), containsString("<element attribute=\"value\"/>"));
+        assertThat(XmlGenerator.toString(t), containsString("<element attribute=\"value\"/>"));
     }
 
     @Test
     public void nested_elements() {
         Tree t = tree("outer", tree("inner-1"), tree("inner-2"));
 
-        assertThat(XmlDocumentGenerator.toString(t), containsString("<outer><inner-1/><inner-2/></outer>"));
+        assertThat(XmlGenerator.toString(t), containsString("<outer><inner-1/><inner-2/></outer>"));
     }
 
     @Test
     public void convert_to_XML() throws Exception {
         Tree tree = tree("some-tree");
-        InputStream in = XmlDocumentGenerator.toInputStream(tree);
+        InputStream in = XmlGenerator.toInputStream(tree);
 
         assertThat(IOUtil.toString(in, StandardCharsets.UTF_8), containsString("<some-tree/>"));
     }
@@ -59,7 +59,7 @@ public class ExamplesTest {
 
     @Test
     public void other_APIs_mentioned_in_README() throws Exception {
-        XmlDocumentGenerator.toDocument(tree("foo"));
+        XmlGenerator.toDocument(tree("foo"));
     }
 
 

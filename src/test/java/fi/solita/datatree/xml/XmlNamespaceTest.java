@@ -19,7 +19,7 @@ public class XmlNamespaceTest {
         Tree t = tree("element",
                 meta("attr", ""));
 
-        Element element = XmlDocumentGenerator.toNamespaceAwareDocument(t)
+        Element element = XmlGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement();
         Attr attr = (Attr) element.getAttributes().item(0);
 
@@ -33,7 +33,7 @@ public class XmlNamespaceTest {
                 meta("attr", ""),
                 meta("xmlns", "http://foo"));
 
-        Element element = XmlDocumentGenerator.toNamespaceAwareDocument(t)
+        Element element = XmlGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement();
         Attr attr = (Attr) element.getAttributes().item(0);
 
@@ -47,7 +47,7 @@ public class XmlNamespaceTest {
                 meta("f:attr", ""),
                 meta("xmlns:f", "http://foo"));
 
-        Element element = XmlDocumentGenerator.toNamespaceAwareDocument(t)
+        Element element = XmlGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement();
         Attr attr = (Attr) element.getAttributes().item(0);
 
@@ -62,7 +62,7 @@ public class XmlNamespaceTest {
                 tree("element",
                         meta("attr", "")));
 
-        Element element = (Element) XmlDocumentGenerator.toNamespaceAwareDocument(t)
+        Element element = (Element) XmlGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getChildNodes().item(0);
         Attr attr = (Attr) element.getAttributes().item(0);
@@ -78,7 +78,7 @@ public class XmlNamespaceTest {
                 tree("f:element",
                         meta("f:attr", "")));
 
-        Element element = (Element) XmlDocumentGenerator.toNamespaceAwareDocument(t)
+        Element element = (Element) XmlGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getChildNodes().item(0);
         Attr attr = (Attr) element.getAttributes().item(0);
@@ -96,7 +96,7 @@ public class XmlNamespaceTest {
                         tree("element",
                                 meta("attr", ""))));
 
-        Element element = (Element) XmlDocumentGenerator.toNamespaceAwareDocument(t)
+        Element element = (Element) XmlGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getChildNodes().item(0)
                 .getChildNodes().item(0);
@@ -115,7 +115,7 @@ public class XmlNamespaceTest {
                         tree("f:element",
                                 meta("f:attr", ""))));
 
-        Element element = (Element) XmlDocumentGenerator.toNamespaceAwareDocument(t)
+        Element element = (Element) XmlGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getChildNodes().item(0)
                 .getChildNodes().item(0);
@@ -129,7 +129,7 @@ public class XmlNamespaceTest {
     public void namespace_of_default_xmlns_attribute() throws Exception {
         Tree t = tree("root", meta("xmlns", "http://foo"));
 
-        Attr attr = (Attr) XmlDocumentGenerator.toNamespaceAwareDocument(t)
+        Attr attr = (Attr) XmlGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getAttributes().item(0);
 
@@ -140,7 +140,7 @@ public class XmlNamespaceTest {
     public void namespace_of_prefixed_xmlns_attribute() throws Exception {
         Tree t = tree("root", meta("xmlns:foo", "http://foo"));
 
-        Attr attr = (Attr) XmlDocumentGenerator.toNamespaceAwareDocument(t)
+        Attr attr = (Attr) XmlGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getAttributes().item(0);
 

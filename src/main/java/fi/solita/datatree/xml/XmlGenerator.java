@@ -13,7 +13,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 
-public class XmlDocumentGenerator {
+public class XmlGenerator {
 
     public static InputStream toInputStream(Tree tree) {
         try {

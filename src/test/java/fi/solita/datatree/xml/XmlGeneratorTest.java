@@ -16,25 +16,25 @@ import static fi.solita.datatree.Tree.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class XmlDocumentGeneratorTest {
+public class XmlGeneratorTest {
 
     @Test
     public void empty_elements() {
-        assertThat(XmlDocumentGenerator.toString(
+        assertThat(XmlGenerator.toString(
                 tree("foo")),
                 is("<foo/>"));
     }
 
     @Test
     public void text_content() {
-        assertThat(XmlDocumentGenerator.toString(
+        assertThat(XmlGenerator.toString(
                 tree("foo", "bar")),
                 is("<foo>bar</foo>"));
     }
 
     @Test
     public void nested_elements() {
-        assertThat(XmlDocumentGenerator.toString(
+        assertThat(XmlGenerator.toString(
                 tree("root",
                         tree("foo", "1"),
                         tree("bar", "2"))),
@@ -43,7 +43,7 @@ public class XmlDocumentGeneratorTest {
 
     @Test
     public void attributes() {
-        assertThat(XmlDocumentGenerator.toString(
+        assertThat(XmlGenerator.toString(
                 tree("root",
                         meta("a", "1"),
                         meta("b", "2"))),
@@ -52,7 +52,7 @@ public class XmlDocumentGeneratorTest {
 
     @Test
     public void can_produce_pretty_printed_strings() {
-        assertThat(XmlDocumentGenerator.toPrettyString(
+        assertThat(XmlGenerator.toPrettyString(
                 tree("root",
                         tree("foo", "1"),
                         tree("bar", "2")))
@@ -65,7 +65,7 @@ public class XmlDocumentGeneratorTest {
 
     @Test
     public void can_produce_input_streams() {
-        InputStream in = XmlDocumentGenerator.toInputStream(tree("foo"));
+        InputStream in = XmlGenerator.toInputStream(tree("foo"));
 
         assertThat(IOUtil.toString(in, StandardCharsets.UTF_8),
                 is("<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo/>"));
@@ -75,7 +75,7 @@ public class XmlDocumentGeneratorTest {
     public void can_produce_namespace_unaware_documents() {
         Tree t = tree("root", meta("xmlns", "http://foo"));
 
-        Element root = XmlDocumentGenerator.toDocument(t).getDocumentElement();
+        Element root = XmlGenerator.toDocument(t).getDocumentElement();
 
         assertThat(root.getNodeName(), is("root"));
         assertThat(root.getNamespaceURI(), is(nullValue()));
@@ -85,7 +85,7 @@ public class XmlDocumentGeneratorTest {
     public void can_produce_namespace_aware_documents() {
         Tree t = tree("root", meta("xmlns", "http://foo"));
 
-        Element root = XmlDocumentGenerator.toNamespaceAwareDocument(t).getDocumentElement();
+        Element root = XmlGenerator.toNamespaceAwareDocument(t).getDocumentElement();
 
         assertThat(root.getNodeName(), is("root"));
         assertThat(root.getNamespaceURI(), is("http://foo"));
@@ -96,8 +96,8 @@ public class XmlDocumentGeneratorTest {
         Tree t = tree("root", "");
 
         for (Document document : Arrays.asList(
-                XmlDocumentGenerator.toDocument(t),
-                XmlDocumentGenerator.toNamespaceAwareDocument(t))) {
+                XmlGenerator.toDocument(t),
+                XmlGenerator.toNamespaceAwareDocument(t))) {
             Element root = document.getDocumentElement();
 
             assertThat(root.getNodeName(), is("root"));

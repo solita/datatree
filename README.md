@@ -38,16 +38,15 @@ Now you can describe an XML document as a series of nested calls to `tree` and
 
 `tree("outer", tree("inner-1"), tree("inner-2"))` becomes `<outer><inner-1/><inner-2/></outer>`
 
-To convert a tree into XML, you can use one of the various methods in
-[`XmlDocumentGenerator`][XmlDocumentGenerator]:
+To convert a tree into XML, you can use one of the various methods in [`XmlGenerator`][XmlGenerator]:
 
 ```
 Tree tree = tree("some-tree");
-InputStream in = XmlDocumentGenerator.toInputStream(tree);
+InputStream in = XmlGenerator.toInputStream(tree);
 ```
 
 [Tree]: https://github.com/solita/datatree/blob/master/src/main/java/fi/solita/datatree/Tree.java
-[XmlDocumentGenerator]: https://github.com/solita/datatree/blob/master/src/main/java/fi/solita/datatree/xml/XmlDocumentGenerator.java
+[XmlGenerator]: https://github.com/solita/datatree/blob/master/src/main/java/fi/solita/datatree/xml/XmlGenerator.java
 
 
 ### Creating XML Schemas
@@ -89,10 +88,11 @@ Version History
 ### Upcoming Changes
 
 - Removed `XmlDocumentGenerator.toXml()`
-- Added `XmlDocumentGenerator.toInputStream()`
-- Added `XmlDocumentGenerator.toString()` and `toPrettyString()`
-- Added `XmlDocumentGenerator.toNamespaceAwareDocument()`
-- `XmlDocumentGenerator.toDocument()` won't anymore produce empty text nodes
+- Renamed `XmlDocumentGenerator` to `XmlGenerator`
+- Added `XmlGenerator.toInputStream()`
+- Added `XmlGenerator.toString()` and `toPrettyString()`
+- Added `XmlGenerator.toNamespaceAwareDocument()`
+- `XmlGenerator.toDocument()` won't anymore produce empty text nodes
 
 ### DataTree 0.5.0 (2013-09-10)
 

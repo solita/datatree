@@ -9,11 +9,9 @@ import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.*;
 import java.io.IOException;
-
-import static fi.solita.datatree.xml.XmlDocumentGenerator.toNamespaceAwareDocument;
 
 public class XmlSchemaValidator {
 
@@ -41,6 +39,6 @@ public class XmlSchemaValidator {
     }
 
     private static Source toSource(Tree schema) {
-        return new DOMSource(toNamespaceAwareDocument(schema));
+        return new StreamSource(XmlGenerator.toInputStream(schema));
     }
 }
