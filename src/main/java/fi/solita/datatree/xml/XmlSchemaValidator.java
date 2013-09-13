@@ -13,14 +13,20 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.*;
 import java.io.IOException;
 
+import static fi.solita.datatree.xml.XmlDocumentGenerator.toNamespaceAwareDocument;
+
 public class XmlSchemaValidator {
 
     public static void validate(Tree schema, Tree subject) throws ValidationException {
-        validate(schema, new DOMSource(XmlDocumentGenerator.toNamespaceAwareDocument(subject)));
+        validate(toSource(schema), toSource(subject));
+    }
+
+    public static void validate(Source schema, Tree subject) throws ValidationException {
+        validate(schema, toSource(subject));
     }
 
     public static void validate(Tree schema, Source subject) throws ValidationException {
-        validate(new DOMSource(XmlDocumentGenerator.toNamespaceAwareDocument(schema)), subject);
+        validate(toSource(schema), subject);
     }
 
     public static void validate(Source schema, Source subject) throws ValidationException {
@@ -32,5 +38,9 @@ public class XmlSchemaValidator {
         } catch (SAXException | IOException e) {
             throw new ValidationException(e);
         }
+    }
+
+    private static Source toSource(Tree schema) {
+        return new DOMSource(toNamespaceAwareDocument(schema));
     }
 }
