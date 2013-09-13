@@ -5,7 +5,7 @@
 package fi.solita.datatree.xml;
 
 import fi.solita.datatree.Tree;
-import org.junit.*;
+import org.junit.Test;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -82,7 +82,7 @@ public class XmlDocumentGeneratorTest {
         Tree t = tree("root",
                 meta("xmlns", "http://foo"));
 
-        Element root = XmlDocumentGenerator.toDocument(t)
+        Element root = XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement();
 
         assertQNameLNameNS(root, "root", "root", "http://foo");
@@ -94,7 +94,7 @@ public class XmlDocumentGeneratorTest {
         Tree t = tree("f:root",
                 meta("xmlns:f", "http://foo"));
 
-        Element root = XmlDocumentGenerator.toDocument(t)
+        Element root = XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement();
 
         assertQNameLNameNS(root, "f:root", "root", "http://foo");
@@ -107,7 +107,7 @@ public class XmlDocumentGeneratorTest {
                 meta("xmlns", "http://foo"),
                 tree("child"));
 
-        Element child = (Element) XmlDocumentGenerator.toDocument(t)
+        Element child = (Element) XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getChildNodes().item(0);
 
@@ -121,7 +121,7 @@ public class XmlDocumentGeneratorTest {
                 meta("xmlns:f", "http://foo"),
                 tree("f:child"));
 
-        Element child = (Element) XmlDocumentGenerator.toDocument(t)
+        Element child = (Element) XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getChildNodes().item(0);
 
@@ -137,7 +137,7 @@ public class XmlDocumentGeneratorTest {
                         meta("xmlns", "http://overloaded"),
                         tree("child")));
 
-        Element child = (Element) XmlDocumentGenerator.toDocument(t)
+        Element child = (Element) XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getChildNodes().item(0)
                 .getChildNodes().item(0);
@@ -154,7 +154,7 @@ public class XmlDocumentGeneratorTest {
                         meta("xmlns:f", "http://overloaded"),
                         tree("f:child")));
 
-        Element child = (Element) XmlDocumentGenerator.toDocument(t)
+        Element child = (Element) XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getChildNodes().item(0)
                 .getChildNodes().item(0);
@@ -167,7 +167,7 @@ public class XmlDocumentGeneratorTest {
     public void namespace_of_default_xmlns_attribute() throws Exception {
         Tree t = tree("root", meta("xmlns", "http://foo"));
 
-        Attr attr = XmlDocumentGenerator.toDocument(t)
+        Attr attr = XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getAttributeNode("xmlns");
 
@@ -179,7 +179,7 @@ public class XmlDocumentGeneratorTest {
     public void namespace_of_prefixed_xmlns_attribute() throws Exception {
         Tree t = tree("root", meta("xmlns:foo", "http://foo"));
 
-        Attr attr = XmlDocumentGenerator.toDocument(t)
+        Attr attr = XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getAttributeNode("xmlns:foo");
 
@@ -192,7 +192,7 @@ public class XmlDocumentGeneratorTest {
         Tree t = tree("root",
                 meta("attr", ""));
 
-        Attr attr = XmlDocumentGenerator.toDocument(t)
+        Attr attr = XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getAttributeNode("attr");
 
@@ -200,18 +200,17 @@ public class XmlDocumentGeneratorTest {
         testAgainstReferenceImpl(t);
     }
 
-    @Ignore // TODO
     @Test
     public void namespace_of_unprefixed_attribute_with_default_namespace() throws Exception {
         Tree t = tree("root",
                 meta("attr", ""),
                 meta("xmlns", "http://foo"));
 
-        Attr attr = XmlDocumentGenerator.toDocument(t)
+        Attr attr = (Attr) XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
-                .getAttributeNode("attr");
+                .getAttributes().item(0);
 
-//        assertQNameLNameNS(attr, "attr", "attr", null);
+        assertQNameLNameNS(attr, "ns0:attr", "attr", "http://foo");
         testAgainstReferenceImpl(t);
     }
 
@@ -221,7 +220,7 @@ public class XmlDocumentGeneratorTest {
                 meta("foo:attr", ""),
                 meta("xmlns:foo", "http://foo"));
 
-        Attr attr = XmlDocumentGenerator.toDocument(t)
+        Attr attr = XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getAttributeNode("foo:attr");
 
@@ -236,7 +235,7 @@ public class XmlDocumentGeneratorTest {
                 tree("child",
                         meta("foo:attr", "")));
 
-        Attr attr = ((Element) XmlDocumentGenerator.toDocument(t)
+        Attr attr = ((Element) XmlDocumentGenerator.toNamespaceAwareDocument(t)
                 .getDocumentElement()
                 .getChildNodes().item(0))
                 .getAttributeNode("foo:attr");
@@ -259,7 +258,7 @@ public class XmlDocumentGeneratorTest {
         factory.setNamespaceAware(true);
         Document expected = factory.newDocumentBuilder().parse(new ByteArrayInputStream(buffer.toByteArray()));
 
-        Document actual = XmlDocumentGenerator.toDocument(tree);
+        Document actual = XmlDocumentGenerator.toNamespaceAwareDocument(tree);
 
         assertStructurallyEqual(actual, expected);
     }

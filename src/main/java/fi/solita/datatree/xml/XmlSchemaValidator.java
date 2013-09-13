@@ -36,7 +36,7 @@ public class XmlSchemaValidator {
             debug(XmlDocumentGenerator.toDocument(schema));
 
             //StreamSource source = new StreamSource(new ByteArrayInputStream(schemaBytes.toByteArray()));
-            DOMSource source = new DOMSource(XmlDocumentGenerator.toDocument(schema));
+            DOMSource source = new DOMSource(XmlDocumentGenerator.toNamespaceAwareDocument(schema));
 
             validate(source, subject);
         } catch (TransformerException e) {

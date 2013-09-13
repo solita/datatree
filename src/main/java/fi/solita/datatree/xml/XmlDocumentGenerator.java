@@ -12,7 +12,7 @@ import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.StringWriter;
+import java.io.*;
 
 public class XmlDocumentGenerator {
 
@@ -56,6 +56,19 @@ public class XmlDocumentGenerator {
             return document;
 
         } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Document toNamespaceAwareDocument(Tree tree) {
+        try {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            toXml(tree, new StreamResult(buffer));
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            return factory.newDocumentBuilder().parse(new ByteArrayInputStream(buffer.toByteArray()));
+
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

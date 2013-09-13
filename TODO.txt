@@ -1,12 +1,12 @@
 
 OK - XmlDocumentGenerator: add helper methods toString, toPrettyString
-- XmlDocumentGenerator#toDocument doesn't support namespaces (it would have to use createElementNS, but subtrees don't know the namespaceURI)
+OK - XmlDocumentGenerator#toDocument doesn't support namespaces (it would have to use createElementNS, but subtrees don't know the namespaceURI)
 	OK - namespaces for elements
 	OK - namespaces for xmlns attribute
 	OK - compare document equality against Java's XML parser (with namespace awareness enabled)
 	OK - namespaces for attributes
 	OK - don't create empty text nodes
-	- fix the last edge case; convert to bytes in the background and use an XML parser?
+	OK - fix the last edge case; convert to bytes in the background and use an XML parser?
 - tests for the methods in XmlSchema
 - helper methods for all XML Schema elements and attributes
 - XmlDocumentGenerator: streaming API
