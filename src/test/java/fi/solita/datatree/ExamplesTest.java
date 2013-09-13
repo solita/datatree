@@ -7,7 +7,6 @@ package fi.solita.datatree;
 import fi.solita.datatree.xml.*;
 import org.junit.Test;
 
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
@@ -45,8 +44,10 @@ public class ExamplesTest {
 
     @Test
     public void convert_to_XML() throws Exception {
-        OutputStream outputStream = new ByteArrayOutputStream();
-        XmlDocumentGenerator.toXml(tree("some-tree"), new StreamResult(outputStream));
+        Tree tree = tree("some-tree");
+        InputStream in = XmlDocumentGenerator.toInputStream(tree);
+
+        assertThat(IOUtil.toString(in, StandardCharsets.UTF_8), containsString("<some-tree/>"));
     }
 
     @Test

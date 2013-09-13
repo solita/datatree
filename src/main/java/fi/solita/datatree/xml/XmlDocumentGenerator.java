@@ -37,7 +37,7 @@ public class XmlDocumentGenerator {
                 transformer.setOutputProperty(OutputKeys.INDENT, "yes");
                 transformer.setOutputProperty(XALAN_INDENT_AMOUNT, String.valueOf(indent));
             }
-            transformer.transform(new DOMSource(XmlDocumentGenerator.toDocument(tree)), new StreamResult(result));
+            transformer.transform(new DOMSource(toDocument(tree)), new StreamResult(result));
             return result.toString();
 
         } catch (TransformerException e) {
@@ -53,11 +53,6 @@ public class XmlDocumentGenerator {
         } catch (TransformerException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static void toXml(Tree tree, Result result) throws TransformerException {
-        Document document = toDocument(tree);
-        TransformerFactory.newInstance().newTransformer().transform(new DOMSource(document), result);
     }
 
     public static Document toNamespaceAwareDocument(Tree tree) {

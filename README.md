@@ -38,13 +38,16 @@ Now you can describe an XML document as a series of nested calls to `tree` and
 
 `tree("outer", tree("inner-1"), tree("inner-2"))` becomes `<outer><inner-1/><inner-2/></outer>`
 
-To convert a tree into XML, you can do this:
+To convert a tree into XML, you can use one of the various methods in
+[`XmlDocumentGenerator`][XmlDocumentGenerator]:
 
 ```
-XmlDocumentGenerator.toXml(tree("some-tree"), new StreamResult(outputStream));
+Tree tree = tree("some-tree");
+InputStream in = XmlDocumentGenerator.toInputStream(tree);
 ```
 
 [Tree]: https://github.com/solita/datatree/blob/master/src/main/java/fi/solita/datatree/Tree.java
+[XmlDocumentGenerator]: https://github.com/solita/datatree/blob/master/src/main/java/fi/solita/datatree/xml/XmlDocumentGenerator.java
 
 
 ### Creating XML Schemas
@@ -85,6 +88,7 @@ Version History
 
 ### Upcoming Changes
 
+- Removed `XmlDocumentGenerator.toXml()`
 - Added `XmlDocumentGenerator.toInputStream()`
 - Added `XmlDocumentGenerator.toString()` and `toPrettyString()`
 - Added `XmlDocumentGenerator.toNamespaceAwareDocument()`
