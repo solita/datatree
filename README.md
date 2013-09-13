@@ -85,6 +85,7 @@ Version History
 
 ### Upcoming Changes
 
+- Added `XmlDocumentGenerator.toInputStream()`
 - Added `XmlDocumentGenerator.toString()` and `toPrettyString()`
 - Added `XmlDocumentGenerator.toNamespaceAwareDocument()`
 - `XmlDocumentGenerator.toDocument()` won't anymore produce empty text nodes

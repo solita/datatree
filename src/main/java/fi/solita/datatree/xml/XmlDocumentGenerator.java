@@ -45,6 +45,16 @@ public class XmlDocumentGenerator {
         }
     }
 
+    public static InputStream toInputStream(Tree tree) {
+        try {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(toDocument(tree)), new StreamResult(buffer));
+            return new ByteArrayInputStream(buffer.toByteArray());
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void toXml(Tree tree, Result result) throws TransformerException {
         Document document = toDocument(tree);
         TransformerFactory.newInstance().newTransformer().transform(new DOMSource(document), result);
@@ -52,11 +62,9 @@ public class XmlDocumentGenerator {
 
     public static Document toNamespaceAwareDocument(Tree tree) {
         try {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            toXml(tree, new StreamResult(buffer));
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
-            return factory.newDocumentBuilder().parse(new ByteArrayInputStream(buffer.toByteArray()));
+            return factory.newDocumentBuilder().parse(toInputStream(tree));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
