@@ -4,7 +4,6 @@
 
 package fi.solita.datatree.xml;
 
-import com.sun.org.apache.xml.internal.serializer.OutputPropertiesFactory;
 import fi.solita.datatree.*;
 import org.w3c.dom.*;
 
@@ -16,6 +15,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 
 public class XmlDocumentGenerator {
+
+    private static final String XALAN_INDENT_AMOUNT = "{http://xml.apache.org/xalan}indent-amount";
 
     public static String toString(Tree tree) {
         try {
@@ -33,7 +34,7 @@ public class XmlDocumentGenerator {
             StringWriter result = new StringWriter();
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputPropertiesFactory.S_KEY_INDENT_AMOUNT, "2");
+            transformer.setOutputProperty(XALAN_INDENT_AMOUNT, "2");
             transformer.transform(new DOMSource(XmlDocumentGenerator.toDocument(tree)), new StreamResult(result));
             return result.toString();
 
