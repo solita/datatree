@@ -97,6 +97,7 @@ Version History
 
 ### Upcoming Changes
 
+- Added `XmlDocumentGenerator.toString` and `XmlDocumentGenerator.toPrettyString`
 - `XmlDocumentGenerator.toDocument()` won't anymore produce empty text nodes
 
 ### DataTree 0.5.0 (2013-09-10)

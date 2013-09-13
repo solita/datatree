@@ -9,7 +9,6 @@ import org.junit.*;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 
@@ -23,21 +22,21 @@ public class XmlDocumentGeneratorTest {
 
     @Test
     public void empty_elements() {
-        assertThat(toXml(
+        assertThat(XmlDocumentGenerator.toString(
                 tree("foo")),
                 is(HEADER + "<foo/>"));
     }
 
     @Test
     public void text_content() {
-        assertThat(toXml(
+        assertThat(XmlDocumentGenerator.toString(
                 tree("foo", "bar")),
                 is(HEADER + "<foo>bar</foo>"));
     }
 
     @Test
     public void nested_elements() {
-        assertThat(toXml(
+        assertThat(XmlDocumentGenerator.toString(
                 tree("root",
                         tree("foo", "1"),
                         tree("bar", "2"))),
@@ -46,7 +45,7 @@ public class XmlDocumentGeneratorTest {
 
     @Test
     public void attributes() {
-        assertThat(toXml(
+        assertThat(XmlDocumentGenerator.toString(
                 tree("root",
                         meta("a", "1"),
                         meta("b", "2"))),
@@ -54,7 +53,21 @@ public class XmlDocumentGeneratorTest {
     }
 
     @Test
-    public void there_are_no_empty_text_nodes() throws Exception {
+    public void can_produce_pretty_printed_xml() {
+        assertThat(XmlDocumentGenerator.toPrettyString(
+                tree("root",
+                        tree("foo", "1"),
+                        tree("bar", "2")))
+                .replace("\r\n", "\n"),
+                is(HEADER +
+                        "<root>\n" +
+                        "  <foo>1</foo>\n" +
+                        "  <bar>2</bar>\n" +
+                        "</root>\n"));
+    }
+
+    @Test
+    public void the_produced_DOM_document_will_not_have_empty_text_nodes() throws Exception {
         Tree t = tree("root", "");
 
         Element root = XmlDocumentGenerator.toDocument(t).getDocumentElement();
@@ -272,17 +285,6 @@ public class XmlDocumentGeneratorTest {
         assertThat("child nodes", actualChildren.getLength(), is(expectedChildren.getLength()));
         for (int i = 0; i < expectedChildren.getLength(); i++) {
             assertStructurallyEqual(actualChildren.item(i), expectedChildren.item(i));
-        }
-    }
-
-    private static String toXml(Tree tree) {
-        try {
-            StringWriter result = new StringWriter();
-            XmlDocumentGenerator.toXml(tree, new StreamResult(result));
-            return result.toString();
-
-        } catch (TransformerException e) {
-            throw new RuntimeException(e);
         }
     }
 }

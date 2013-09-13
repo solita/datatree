@@ -1,5 +1,5 @@
 
-- XmlDocumentGenerator: add helper methods toString, toPrettyString
+OK - XmlDocumentGenerator: add helper methods toString, toPrettyString
 - XmlDocumentGenerator#toDocument doesn't support namespaces (it would have to use createElementNS, but subtrees don't know the namespaceURI)
 	OK - namespaces for elements
 	OK - namespaces for xmlns attribute
@@ -10,3 +10,5 @@
 - tests for the methods in XmlSchema
 - helper methods for all XML Schema elements and attributes
 - XmlDocumentGenerator: streaming API
+- pretty printing: newline after xml header
+	http://stackoverflow.com/questions/16775210/root-element-in-xml-file-is-not-indented

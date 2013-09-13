@@ -4,6 +4,7 @@
 
 package fi.solita.datatree.xml;
 
+import com.sun.org.apache.xml.internal.serializer.OutputPropertiesFactory;
 import fi.solita.datatree.*;
 import org.w3c.dom.*;
 
@@ -11,8 +12,35 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.StringWriter;
 
 public class XmlDocumentGenerator {
+
+    public static String toString(Tree tree) {
+        try {
+            StringWriter result = new StringWriter();
+            toXml(tree, new StreamResult(result));
+            return result.toString();
+
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String toPrettyString(Tree tree) {
+        try {
+            StringWriter result = new StringWriter();
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputPropertiesFactory.S_KEY_INDENT_AMOUNT, "2");
+            transformer.transform(new DOMSource(XmlDocumentGenerator.toDocument(tree)), new StreamResult(result));
+            return result.toString();
+
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void toXml(Tree tree, Result result) throws TransformerException {
         Document document = toDocument(tree);
