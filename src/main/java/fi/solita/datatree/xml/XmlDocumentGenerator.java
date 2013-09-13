@@ -15,7 +15,16 @@ import java.io.*;
 
 public class XmlDocumentGenerator {
 
-    private static final String XALAN_INDENT_AMOUNT = "{http://xml.apache.org/xalan}indent-amount";
+    public static InputStream toInputStream(Tree tree) {
+        try {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(toDocument(tree)), new StreamResult(buffer));
+            return new ByteArrayInputStream(buffer.toByteArray());
+
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static String toString(Tree tree) {
         return toString(tree, 0);
@@ -35,21 +44,11 @@ public class XmlDocumentGenerator {
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
             if (indent > 0) {
                 transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                transformer.setOutputProperty(XALAN_INDENT_AMOUNT, String.valueOf(indent));
+                transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", String.valueOf(indent));
             }
             transformer.transform(new DOMSource(toDocument(tree)), new StreamResult(result));
             return result.toString();
 
-        } catch (TransformerException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static InputStream toInputStream(Tree tree) {
-        try {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(toDocument(tree)), new StreamResult(buffer));
-            return new ByteArrayInputStream(buffer.toByteArray());
         } catch (TransformerException e) {
             throw new RuntimeException(e);
         }
