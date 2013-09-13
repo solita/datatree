@@ -7,7 +7,6 @@ package fi.solita.datatree;
 import fi.solita.datatree.xml.*;
 import org.junit.Test;
 
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.*;
@@ -27,21 +26,21 @@ public class ExamplesTest {
     public void element_with_text() {
         Tree t = tree("element", "some text");
 
-        assertThat(toXml(t), containsString("<element>some text</element>"));
+        assertThat(XmlDocumentGenerator.toString(t), containsString("<element>some text</element>"));
     }
 
     @Test
     public void element_with_attributes() {
         Tree t = tree("element", meta("attribute", "value"));
 
-        assertThat(toXml(t), containsString("<element attribute=\"value\"/>"));
+        assertThat(XmlDocumentGenerator.toString(t), containsString("<element attribute=\"value\"/>"));
     }
 
     @Test
     public void nested_elements() {
         Tree t = tree("outer", tree("inner-1"), tree("inner-2"));
 
-        assertThat(toXml(t), containsString("<outer><inner-1/><inner-2/></outer>"));
+        assertThat(XmlDocumentGenerator.toString(t), containsString("<outer><inner-1/><inner-2/></outer>"));
     }
 
     @Test
@@ -69,10 +68,10 @@ public class ExamplesTest {
 
     @Test
     public void code_samples_in_README_are_in_sync_with_this_example() throws IOException {
-        String readme = read(README);
+        String readme = IOUtil.toString(README, StandardCharsets.UTF_8);
         readme = readme.substring(0, readme.indexOf("Version History")); // ignore old method names etc.
 
-        String examples = read(Paths.get("src/test/java").resolve(getClass().getName().replace('.', '/') + ".java"));
+        String examples = IOUtil.toString(Paths.get("src/test/java").resolve(getClass().getName().replace('.', '/') + ".java"), StandardCharsets.UTF_8);
         examples = examples.replace("\\\"", "\"");          // unescape XML in strings
         examples = examples.replaceAll("(?m)^\\s+", "");    // remove indentation
 
@@ -88,7 +87,7 @@ public class ExamplesTest {
     public void links_in_README_are_working() throws Exception {
         TestEnvironment.assumeSlowTestsEnabled();
 
-        String readme = read(README);
+        String readme = IOUtil.toString(README, StandardCharsets.UTF_8);
         for (URL url : findLinks(readme)) {
             System.out.println("Checking URL: " + url);
             String status = url.openConnection().getHeaderField("Status");
@@ -116,19 +115,5 @@ public class ExamplesTest {
             results.add(new URL(m.group()));
         }
         return results;
-    }
-
-    private static String read(Path path) throws IOException {
-        return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-    }
-
-    private static String toXml(Tree tree) {
-        try {
-            StringWriter writer = new StringWriter();
-            XmlDocumentGenerator.toXml(tree, new StreamResult(writer));
-            return writer.toString();
-        } catch (TransformerException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

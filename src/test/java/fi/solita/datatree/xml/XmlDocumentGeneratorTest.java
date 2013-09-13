@@ -4,13 +4,13 @@
 
 package fi.solita.datatree.xml;
 
-import fi.solita.datatree.Tree;
+import fi.solita.datatree.*;
 import org.junit.Test;
 import org.w3c.dom.*;
 
 import java.io.InputStream;
-import java.nio.charset.*;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static fi.solita.datatree.Tree.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -67,7 +67,7 @@ public class XmlDocumentGeneratorTest {
     public void can_produce_input_streams() {
         InputStream in = XmlDocumentGenerator.toInputStream(tree("foo"));
 
-        assertThat(toString(in, StandardCharsets.UTF_8),
+        assertThat(IOUtil.toString(in, StandardCharsets.UTF_8),
                 is("<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo/>"));
     }
 
@@ -103,10 +103,5 @@ public class XmlDocumentGeneratorTest {
             assertThat(root.getNodeName(), is("root"));
             assertThat("child nodes", root.getChildNodes().getLength(), is(0));
         }
-    }
-
-
-    private static String toString(InputStream in, Charset charset) {
-        return new Scanner(in, charset.name()).useDelimiter("\\A").next();
     }
 }
