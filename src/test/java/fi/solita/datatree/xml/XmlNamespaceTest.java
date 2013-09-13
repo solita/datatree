@@ -151,7 +151,7 @@ public class XmlNamespaceTest {
                 .getDocumentElement()
                 .getAttributes().item(0);
 
-        assertQNameLNameNS(attr, "ns0:attr", "attr", "http://foo");
+        assertQNameLNameNS(attr, "attr", "attr", null);
         testAgainstReferenceImpl(t);
     }
 
