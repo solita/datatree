@@ -19,22 +19,25 @@ public class XmlDocumentGenerator {
     private static final String XALAN_INDENT_AMOUNT = "{http://xml.apache.org/xalan}indent-amount";
 
     public static String toString(Tree tree) {
-        try {
-            StringWriter result = new StringWriter();
-            toXml(tree, new StreamResult(result));
-            return result.toString();
-
-        } catch (TransformerException e) {
-            throw new RuntimeException(e);
-        }
+        return toString(tree, 0);
     }
 
     public static String toPrettyString(Tree tree) {
+        return toString(tree, 2);
+    }
+
+    private static String toString(Tree tree, int indent) {
         try {
             StringWriter result = new StringWriter();
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(XALAN_INDENT_AMOUNT, "2");
+            // The encoding in the XML declaration will not be correct for strings,
+            // so we omit it do discourage anyone from writing the string to file.
+            // It is preferable to treat XML with the same care as binary data.
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            if (indent > 0) {
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty(XALAN_INDENT_AMOUNT, String.valueOf(indent));
+            }
             transformer.transform(new DOMSource(XmlDocumentGenerator.toDocument(tree)), new StreamResult(result));
             return result.toString();
 

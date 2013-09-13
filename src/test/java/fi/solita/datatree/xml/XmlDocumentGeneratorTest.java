@@ -14,20 +14,18 @@ import static org.hamcrest.Matchers.is;
 
 public class XmlDocumentGeneratorTest {
 
-    private static final String HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-
     @Test
     public void empty_elements() {
         assertThat(XmlDocumentGenerator.toString(
                 tree("foo")),
-                is(HEADER + "<foo/>"));
+                is("<foo/>"));
     }
 
     @Test
     public void text_content() {
         assertThat(XmlDocumentGenerator.toString(
                 tree("foo", "bar")),
-                is(HEADER + "<foo>bar</foo>"));
+                is("<foo>bar</foo>"));
     }
 
     @Test
@@ -36,7 +34,7 @@ public class XmlDocumentGeneratorTest {
                 tree("root",
                         tree("foo", "1"),
                         tree("bar", "2"))),
-                is(HEADER + "<root><foo>1</foo><bar>2</bar></root>"));
+                is("<root><foo>1</foo><bar>2</bar></root>"));
     }
 
     @Test
@@ -45,7 +43,7 @@ public class XmlDocumentGeneratorTest {
                 tree("root",
                         meta("a", "1"),
                         meta("b", "2"))),
-                is(HEADER + "<root a=\"1\" b=\"2\"/>"));
+                is("<root a=\"1\" b=\"2\"/>"));
     }
 
     @Test
@@ -55,8 +53,7 @@ public class XmlDocumentGeneratorTest {
                         tree("foo", "1"),
                         tree("bar", "2")))
                 .replace("\r\n", "\n"),
-                is(HEADER +
-                        "<root>\n" +
+                is("<root>\n" +
                         "  <foo>1</foo>\n" +
                         "  <bar>2</bar>\n" +
                         "</root>\n"));
