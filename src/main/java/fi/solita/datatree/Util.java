@@ -26,17 +26,16 @@ class Util {
                 flatten(results, x);
             }
         } else {
-            checkIfAllowedType(item);
-            results.add(item);
+            results.add(toAllowedType(item));
         }
     }
 
-    private static void checkIfAllowedType(Object item) {
+    private static Object toAllowedType(Object item) {
         Class<?> c = item.getClass();
         if (c == String.class || c == Tree.class || c == Meta.class) {
-            return;
+            return item;
         }
-        throw new IllegalArgumentException("Cannot contain " + c.getName() + " instances; tried to add " + item);
+        return item.toString();
     }
 
     public static String filterOneString(Object[] xs) {

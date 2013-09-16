@@ -17,8 +17,9 @@ public final class Tree {
      * Constructs a tree node. Tree nodes correspond to XML elements.
      *
      * @param name    name of this tree node. Should be a valid XML element name.
-     * @param content {@link String}, {@link Tree} or {@link Meta} instances,
-     *                or arrays or {@link Iterable}s containing them.
+     * @param content {@link String}, {@link Tree} or {@link Meta} instances.
+     *                Unknown types are converted to {@code String} using {@link Object#toString()}.
+     *                May also contain arrays or {@link Iterable}s containing those instances; they will be flattened.
      *                The following restrictions apply:
      *                <ul>
      *                <li>At most one {@code String} is allowed</li>
@@ -32,7 +33,7 @@ public final class Tree {
     /**
      * Constructs a meta node. Meta nodes correspond to XML attributes.
      */
-    public static Meta meta(String name, String value) {
+    public static Meta meta(String name, Object value) {
         return new Meta(name, value);
     }
 

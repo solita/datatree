@@ -12,13 +12,13 @@ public final class Meta {
     private final String value;
 
     /**
-     * Construct using the factory method {@link Tree#meta(String, String)}
+     * Construct using the factory method {@link Tree#meta(String, Object)}
      */
-    Meta(String name, String value) {
+    Meta(String name, Object value) {
         Objects.requireNonNull(name, "name must be non-null");
         Objects.requireNonNull(value, "value must be non-null");
         this.name = name;
-        this.value = value;
+        this.value = value.toString();
     }
 
     public String name() {

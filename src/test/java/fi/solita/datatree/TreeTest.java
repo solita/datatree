@@ -35,16 +35,14 @@ public class TreeTest {
     }
 
     @Test
-    public void cannot_contain_unsupported_types() {
-        Object unsupported = new Object();
+    public void converts_unknown_types_to_string() {
+        Tree t = tree("name", 42);
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Cannot contain java.lang.Object instances; tried to add " + unsupported);
-        tree("name", unsupported);
+        assertThat(t, is(tree("name", "42")));
     }
 
     @Test
-    public void may_have_text() {
+    public void may_contain_text() {
         Tree t = tree("name", "text");
 
         assertThat(t.text(), is("text"));

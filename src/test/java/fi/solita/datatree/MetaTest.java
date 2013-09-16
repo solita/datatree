@@ -46,6 +46,13 @@ public class MetaTest {
     }
 
     @Test
+    public void converts_unknown_types_to_string() {
+        Meta m = meta("name", 42);
+
+        assertThat(m, is(meta("name", "42")));
+    }
+
+    @Test
     public void to_string() {
         assertThat(meta("name", "value").toString(), is("{name \"value\"}"));
         assertThat(meta("name", "").toString(), is("{name}"));

@@ -85,6 +85,11 @@ succinct syntax for creating XML documents and schemas.
 Version History
 ---------------
 
+### Upcoming Changes
+
+- `tree` and `meta` will accept any instances and convert them automatically
+to `String` using `toString()`
+
 ### DataTree 0.7.0 (2013-09-16)
 
 - Added `XmlGenerator.toByteArray()`
