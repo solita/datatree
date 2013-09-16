@@ -19,10 +19,17 @@ public class XmlGenerator {
      * Fully formed XML as {@code InputStream}.
      */
     public static InputStream toInputStream(Tree tree) {
+        return new ByteArrayInputStream(toByteArray(tree));
+    }
+
+    /**
+     * Fully formed XML as {@code byte[]}.
+     */
+    public static byte[] toByteArray(Tree tree) {
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             TransformerFactory.newInstance().newTransformer().transform(new DOMSource(toDocument(tree)), new StreamResult(buffer));
-            return new ByteArrayInputStream(buffer.toByteArray());
+            return buffer.toByteArray();
 
         } catch (TransformerException e) {
             throw new RuntimeException(e);

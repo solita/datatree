@@ -1,5 +1,4 @@
 
-- XmlGenerator.toByteArray()
 - tests for the methods in XmlSchema
 - helper methods for all XML Schema elements and attributes
 - XmlDocumentGenerator: streaming API

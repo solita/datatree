@@ -72,6 +72,14 @@ public class XmlGeneratorTest {
     }
 
     @Test
+    public void can_produce_byte_arrays() {
+        byte[] bytes = XmlGenerator.toByteArray(tree("foo"));
+
+        assertThat(new String(bytes, StandardCharsets.UTF_8),
+                is("<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo/>"));
+    }
+
+    @Test
     public void can_produce_namespace_unaware_documents() {
         Tree t = tree("root", meta("xmlns", "http://foo"));
 

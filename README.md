@@ -85,6 +85,10 @@ succinct syntax for creating XML documents and schemas.
 Version History
 ---------------
 
+### Upcoming Changes
+
+- Added `XmlGenerator.toByteArray()`
+
 ### DataTree 0.6.0 (2013-09-13)
 
 - Removed `XmlDocumentGenerator.toXml()`
