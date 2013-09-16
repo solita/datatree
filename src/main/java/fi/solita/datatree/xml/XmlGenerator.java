@@ -15,6 +15,9 @@ import java.io.*;
 
 public class XmlGenerator {
 
+    /**
+     * Fully formed XML as {@code InputStream}.
+     */
     public static InputStream toInputStream(Tree tree) {
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -26,10 +29,20 @@ public class XmlGenerator {
         }
     }
 
+    /**
+     * XML as {@code String}, on a single line, without the XML declaration.
+     * Useful for debugging, but not recommended for production use, due to
+     * not being aware of character encodings.
+     */
     public static String toString(Tree tree) {
         return toString(tree, 0);
     }
 
+    /**
+     * XML as {@code String}, with indentation, without the XML declaration.
+     * Useful for debugging, but not recommended for production use, due to
+     * not being aware of character encodings.
+     */
     public static String toPrettyString(Tree tree) {
         return toString(tree, 2);
     }
@@ -54,6 +67,9 @@ public class XmlGenerator {
         }
     }
 
+    /**
+     * DOM Document, with namespaces.
+     */
     public static Document toNamespaceAwareDocument(Tree tree) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -65,6 +81,9 @@ public class XmlGenerator {
         }
     }
 
+    /**
+     * DOM Document, not namespace aware.
+     */
     public static Document toDocument(Tree tree) {
         try {
             Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
