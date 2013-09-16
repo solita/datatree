@@ -19,7 +19,7 @@ Get this library from Maven Central using the following dependency:
 <dependency>
     <groupId>fi.solita.datatree</groupId>
     <artifactId>datatree</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
@@ -85,7 +85,7 @@ succinct syntax for creating XML documents and schemas.
 Version History
 ---------------
 
-### Upcoming Changes
+### DataTree 0.7.0 (2013-09-16)
 
 - Added `XmlGenerator.toByteArray()`
 
