@@ -19,7 +19,7 @@ Get this library from Maven Central using the following dependency:
 <dependency>
     <groupId>fi.solita.datatree</groupId>
     <artifactId>datatree</artifactId>
-    <version>0.8.0</version>
+    <version>0.9.0</version>
 </dependency>
 ```
 
@@ -92,10 +92,10 @@ succinct syntax for creating XML documents and schemas.
 Version History
 ---------------
 
-### Upcoming Changes
+### DataTree 0.9.0 (2013-09-20)
 
 - Can validate the schema of schemas without the validator downloading the
-schemas files for XML Schema and XML Namespaces from www.w3.org
+schemas for XML Schema and XML Namespaces from www.w3.org
 
 ### DataTree 0.8.0 (2013-09-16)
 
