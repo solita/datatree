@@ -58,6 +58,12 @@ public class ExamplesTest {
     }
 
     @Test
+    public void xml_schema_schemas() {
+        Tree schema = schema(element("foo"));
+        XmlSchemaValidator.validate(XmlSchema.XSD, schema);
+    }
+
+    @Test
     public void other_APIs_mentioned_in_README() throws Exception {
         XmlGenerator.toDocument(tree("foo"));
     }

@@ -66,6 +66,13 @@ Tree document = tree("foo");
 XmlSchemaValidator.validate(schema, document);
 ```
 
+You may also validate the schema itself against the XML Schema schema:
+
+```
+Tree schema = schema(element("foo"));
+XmlSchemaValidator.validate(XmlSchema.XSD, schema);
+```
+
 There are not yet helper methods for every XML Schema element and attribute.
 Maybe later. Create a pull request if you want to add something there.
 
