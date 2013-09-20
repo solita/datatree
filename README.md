@@ -85,6 +85,11 @@ succinct syntax for creating XML documents and schemas.
 Version History
 ---------------
 
+### Upcoming Changes
+
+- Can validate the schema of schemas without the validator downloading the
+schemas files for XML Schema and XML Namespaces from www.w3.org
+
 ### DataTree 0.8.0 (2013-09-16)
 
 - `tree` and `meta` will accept any instances and convert them automatically

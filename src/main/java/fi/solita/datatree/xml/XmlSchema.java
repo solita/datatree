@@ -6,11 +6,14 @@ package fi.solita.datatree.xml;
 
 import fi.solita.datatree.*;
 
+import java.net.URL;
 import java.util.*;
 
 import static fi.solita.datatree.Tree.*;
 
 public class XmlSchema {
+
+    public static final URL XSD = XmlSchema.class.getResource("XMLSchema.xsd");
 
     public static Tree schema(Object... body) {
         return tree("xs:schema", meta("xmlns:xs", "http://www.w3.org/2001/XMLSchema"), body);
