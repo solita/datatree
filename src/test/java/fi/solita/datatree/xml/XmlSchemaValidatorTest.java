@@ -5,7 +5,6 @@
 package fi.solita.datatree.xml;
 
 import fi.solita.datatree.Tree;
-import org.apache.commons.io.IOUtils;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
@@ -93,54 +92,6 @@ public class XmlSchemaValidatorTest {
         removeIfProtocolEquals("file", UrlSpy.openedConnections);
         assertThat("downloaded files", UrlSpy.openedConnections, is(empty()));
     }
-
-    @Ignore // TODO
-    @Test
-    public void is_not_vulnerable_to_XXE_attacks() {
-        // See https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing
-        String attacker = "<?xml version=\"1.0\"?>" +
-                "<!DOCTYPE foo [" +
-                "  <!ELEMENT foo ANY >" +
-                "  <!ENTITY xxe SYSTEM \"file:///secret.txt\" >" +
-                "]>" +
-                "<foo>&xxe;</foo>";
-
-        thrown.expect(ValidationException.class);
-        thrown.expectMessage("DOCTYPE is disallowed");
-        new XmlSchemaValidator(schema).validate(new StreamSource(IOUtils.toInputStream(attacker)));
-    }
-
-    @Ignore // TODO
-    @Test
-    public void is_not_vulnerable_to_XML_bombs() {
-        // See http://msdn.microsoft.com/en-us/magazine/ee335713.aspx
-        String attacker = "<?xml version=\"1.0\"?>" +
-                "<!DOCTYPE foo [" +
-                "  <!ENTITY a \"aaaaaaaaaaaaaaaaaa\">" +
-                "]>" +
-                "<foo>&a;&a;&a;&a;&a;&a;&a;&a;&a;</foo>";
-
-//        attacker = "<?xml version=\"1.0\"?>\n" +
-//                "<!DOCTYPE lolz [\n" +
-//                "  <!ENTITY lol \"lol\">\n" +
-//                "  <!ENTITY lol2 \"&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;\">\n" +
-//                "  <!ENTITY lol3 \"&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;\">\n" +
-//                "  <!ENTITY lol4 \"&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;\">\n" +
-//                "  <!ENTITY lol5 \"&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;\">\n" +
-//                "  <!ENTITY lol6 \"&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;\">\n" +
-//                "  <!ENTITY lol7 \"&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;\">\n" +
-//                "  <!ENTITY lol8 \"&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;\">\n" +
-//                "  <!ENTITY lol9 \"&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;\">\n" +
-//                "]>\n" +
-//                "<lolz>&lol9;</lolz>";
-
-        thrown.expect(ValidationException.class);
-        thrown.expectMessage("DOCTYPE is disallowed");
-        new XmlSchemaValidator(schema).validate(new StreamSource(IOUtils.toInputStream(attacker)));
-    }
-
-
-    // helpers
 
     private static void removeIfProtocolEquals(String protocol, List<URL> urls) {
         for (Iterator<URL> it = urls.iterator(); it.hasNext(); ) {

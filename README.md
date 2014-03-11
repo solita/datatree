@@ -97,6 +97,8 @@ Version History
 - Changed `XmlSchemaValidator` to have only instance methods. The XML sources
 are stateful, so you must create a new instance of the validator for every
 document that you validate
+- Added `XmlVulnerabilities` utility for checking whether an XML document may
+contain an XXE or DoS attack
 
 ### DataTree 0.9.0 (2013-09-20)
 
