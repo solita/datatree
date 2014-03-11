@@ -1,4 +1,4 @@
-// Copyright © 2013 Solita Oy <www.solita.fi>
+// Copyright © 2013-2014 Solita Oy <www.solita.fi>
 // This software is released under the MIT License.
 // The license text is at http://opensource.org/licenses/MIT
 
@@ -54,13 +54,13 @@ public class ExamplesTest {
     public void xml_schemas() {
         Tree schema = schema(element("foo"));
         Tree document = tree("foo");
-        XmlSchemaValidator.validate(schema, document);
+        new XmlSchemaValidator(schema).validate(document);
     }
 
     @Test
     public void xml_schema_schemas() {
         Tree schema = schema(element("foo"));
-        XmlSchemaValidator.validate(XmlSchema.XSD, schema);
+        new XmlSchemaValidator(XmlSchema.XSD).validate(schema);
     }
 
     @Test

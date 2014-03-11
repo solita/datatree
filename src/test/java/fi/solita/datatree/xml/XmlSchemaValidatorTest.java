@@ -1,4 +1,4 @@
-// Copyright © 2014 Solita Oy <www.solita.fi>
+// Copyright © 2013-2014 Solita Oy <www.solita.fi>
 // This software is released under the MIT License.
 // The license text is at http://opensource.org/licenses/MIT
 
@@ -31,51 +31,64 @@ public class XmlSchemaValidatorTest {
 
     @Test
     public void validates_Tree_schema_and_Tree_subject() {
-        XmlSchemaValidator.validate(schema, validTree);
+        new XmlSchemaValidator(schema).validate(validTree);
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(schema, invalidTree);
+        new XmlSchemaValidator(schema).validate(invalidTree);
     }
 
     @Test
     public void validates_Tree_schema_and_Source_subject() {
-        XmlSchemaValidator.validate(schema, asSource(validTree));
+        new XmlSchemaValidator(schema).validate(asSource(validTree));
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(schema, asSource(invalidTree));
+        new XmlSchemaValidator(schema).validate(asSource(invalidTree));
     }
 
     @Test
     public void validates_URL_schema_and_Tree_subject() {
-        XmlSchemaValidator.validate(schemaUrl, validTree);
+        new XmlSchemaValidator(schemaUrl).validate(validTree);
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(schemaUrl, invalidTree);
+        new XmlSchemaValidator(schemaUrl).validate(invalidTree);
     }
 
     @Test
     public void validates_URL_schema_and_Source_subject() {
-        XmlSchemaValidator.validate(schemaUrl, asSource(validTree));
+        new XmlSchemaValidator(schemaUrl).validate(asSource(validTree));
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(schemaUrl, asSource(invalidTree));
+        new XmlSchemaValidator(schemaUrl).validate(asSource(invalidTree));
     }
 
     @Test
     public void validates_Source_schema_and_Tree_subject() {
-        XmlSchemaValidator.validate(asSource(schema), validTree);
+        new XmlSchemaValidator(asSource(schema)).validate(validTree);
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(asSource(schema), invalidTree);
+        new XmlSchemaValidator(asSource(schema)).validate(invalidTree);
     }
 
     @Test
     public void validates_Source_schema_and_Source_subject() {
-        XmlSchemaValidator.validate(asSource(schema), asSource(validTree));
+        new XmlSchemaValidator(asSource(schema)).validate(asSource(validTree));
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(asSource(schema), asSource(invalidTree));
+        new XmlSchemaValidator(asSource(schema)).validate(asSource(invalidTree));
+    }
+
+    /**
+     * {@link Source} instances (of the schema) are stateful and cannot be reused,
+     * so also our validator is non-reusable.
+     */
+    @Test
+    public void the_validator_object_cannot_be_reused() {
+        XmlSchemaValidator validator = new XmlSchemaValidator(schema);
+        validator.validate(validTree);
+
+        thrown.expect(IllegalStateException.class);
+        validator.validate(validTree);
     }
 
     @Test
     public void validating_a_schema_will_not_download_any_files_from_the_internet() throws Exception {
         UrlSpy.openedConnections.clear();
 
-        XmlSchemaValidator.validate(XmlSchema.XSD, schema(element("foo")));
+        new XmlSchemaValidator(XmlSchema.XSD).validate(schema(element("foo")));
 
         removeIfProtocolEquals("file", UrlSpy.openedConnections);
         assertThat("downloaded files", UrlSpy.openedConnections, is(empty()));
@@ -94,7 +107,7 @@ public class XmlSchemaValidatorTest {
 
         thrown.expect(ValidationException.class);
         thrown.expectMessage("DOCTYPE is disallowed");
-        XmlSchemaValidator.validate(schema, new StreamSource(IOUtils.toInputStream(attacker)));
+        new XmlSchemaValidator(schema).validate(new StreamSource(IOUtils.toInputStream(attacker)));
     }
 
     @Ignore // TODO
@@ -123,7 +136,7 @@ public class XmlSchemaValidatorTest {
 
         thrown.expect(ValidationException.class);
         thrown.expectMessage("DOCTYPE is disallowed");
-        XmlSchemaValidator.validate(schema, new StreamSource(IOUtils.toInputStream(attacker)));
+        new XmlSchemaValidator(schema).validate(new StreamSource(IOUtils.toInputStream(attacker)));
     }
 
 

@@ -63,14 +63,14 @@ And then use those to generate a tree that represents the schema:
 ```
 Tree schema = schema(element("foo"));
 Tree document = tree("foo");
-XmlSchemaValidator.validate(schema, document);
+new XmlSchemaValidator(schema).validate(document);
 ```
 
 You may also validate the schema itself against the XML Schema schema:
 
 ```
 Tree schema = schema(element("foo"));
-XmlSchemaValidator.validate(XmlSchema.XSD, schema);
+new XmlSchemaValidator(XmlSchema.XSD).validate(schema);
 ```
 
 There are not yet helper methods for every XML Schema element and attribute.
@@ -91,6 +91,12 @@ succinct syntax for creating XML documents and schemas.
 
 Version History
 ---------------
+
+### Upcoming
+
+- Changed `XmlSchemaValidator` to have only instance methods. The XML sources
+are stateful, so you must create a new instance of the validator for every
+document that you validate
 
 ### DataTree 0.9.0 (2013-09-20)
 

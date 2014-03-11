@@ -1,4 +1,4 @@
-// Copyright © 2013 Solita Oy <www.solita.fi>
+// Copyright © 2013-2014 Solita Oy <www.solita.fi>
 // This software is released under the MIT License.
 // The license text is at http://opensource.org/licenses/MIT
 
@@ -16,27 +16,27 @@ import java.net.URL;
 
 public class XmlSchemaValidator {
 
-    public static void validate(Tree schema, Tree subject) throws ValidationException {
-        validate(toSource(schema), toSource(subject));
+    private final Source schema;
+    private boolean used = false;
+
+    public XmlSchemaValidator(Tree schema) {
+        this(toSource(schema));
     }
 
-    public static void validate(Tree schema, Source subject) throws ValidationException {
-        validate(toSource(schema), subject);
+    public XmlSchemaValidator(URL schema) {
+        this(toSource(schema));
     }
 
-    public static void validate(URL schema, Tree subject) {
-        validate(toSource(schema), toSource(subject));
+    public XmlSchemaValidator(Source schema) {
+        this.schema = schema;
     }
 
-    public static void validate(URL schema, Source subject) {
-        validate(toSource(schema), subject);
+    public void validate(Tree subject) throws ValidationException {
+        validate(toSource(subject));
     }
 
-    public static void validate(Source schema, Tree subject) throws ValidationException {
-        validate(schema, toSource(subject));
-    }
-
-    public static void validate(Source schema, Source subject) throws ValidationException {
+    public void validate(Source subject) throws ValidationException {
+        ensureUsedOnlyOnce();
         try {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             factory.setResourceResolver(new MappedResourceResolver());
@@ -47,6 +47,13 @@ public class XmlSchemaValidator {
         } catch (SAXException | IOException e) {
             throw new ValidationException(e);
         }
+    }
+
+    private synchronized void ensureUsedOnlyOnce() {
+        if (used) {
+            throw new IllegalStateException("this validator has already been used once; create a new instance and use it instead");
+        }
+        used = true;
     }
 
     private static Source toSource(Tree tree) {

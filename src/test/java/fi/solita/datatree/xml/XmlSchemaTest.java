@@ -1,4 +1,4 @@
-// Copyright © 2013 Solita Oy <www.solita.fi>
+// Copyright © 2013-2014 Solita Oy <www.solita.fi>
 // This software is released under the MIT License.
 // The license text is at http://opensource.org/licenses/MIT
 
@@ -20,9 +20,9 @@ public class XmlSchemaTest {
     public void element_name() {
         Tree schema = schema(element("correct-name"));
 
-        XmlSchemaValidator.validate(schema, tree("correct-name"));
+        new XmlSchemaValidator(schema).validate(tree("correct-name"));
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(schema, tree("wrong-name"));
+        new XmlSchemaValidator(schema).validate(tree("wrong-name"));
     }
 
     @Test
@@ -32,16 +32,16 @@ public class XmlSchemaTest {
                         element("foo"),
                         element("bar")))));
 
-        XmlSchemaValidator.validate(schema,
+        new XmlSchemaValidator(schema).validate(
                 tree("root",
                         tree("foo"),
                         tree("bar")));
-        XmlSchemaValidator.validate(schema,
+        new XmlSchemaValidator(schema).validate(
                 tree("root",
                         tree("bar"),
                         tree("foo")));
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(schema,
+        new XmlSchemaValidator(schema).validate(
                 tree("root",
                         tree("foo")));
     }
@@ -55,15 +55,15 @@ public class XmlSchemaTest {
                 element("root", complexType(sequence(
                         element("foo", maxOccurs(2))))));
 
-        XmlSchemaValidator.validate(schema,
+        new XmlSchemaValidator(schema).validate(
                 tree("root",
                         tree("foo")));
-        XmlSchemaValidator.validate(schema,
+        new XmlSchemaValidator(schema).validate(
                 tree("root",
                         tree("foo"),
                         tree("foo")));
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(schema,
+        new XmlSchemaValidator(schema).validate(
                 tree("root",
                         tree("foo"),
                         tree("foo"),
@@ -76,10 +76,10 @@ public class XmlSchemaTest {
                 element("root", complexType(
                         attribute("attr-name"))));
 
-        XmlSchemaValidator.validate(schema, tree("root"));
-        XmlSchemaValidator.validate(schema, tree("root", meta("attr-name", "attr-value")));
+        new XmlSchemaValidator(schema).validate(tree("root"));
+        new XmlSchemaValidator(schema).validate(tree("root", meta("attr-name", "attr-value")));
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(schema, tree("root", meta("wrong-attr-name", "attr-value")));
+        new XmlSchemaValidator(schema).validate(tree("root", meta("wrong-attr-name", "attr-value")));
     }
 
     @Test
@@ -88,8 +88,8 @@ public class XmlSchemaTest {
                 element("root", complexType(
                         attribute("attr-name", required()))));
 
-        XmlSchemaValidator.validate(schema, tree("root", meta("attr-name", "attr-value")));
+        new XmlSchemaValidator(schema).validate(tree("root", meta("attr-name", "attr-value")));
         thrown.expect(ValidationException.class);
-        XmlSchemaValidator.validate(schema, tree("root"));
+        new XmlSchemaValidator(schema).validate(tree("root"));
     }
 }
