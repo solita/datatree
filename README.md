@@ -94,9 +94,9 @@ Version History
 
 ### Upcoming
 
-- Changed `XmlSchemaValidator` to have only instance methods. The XML sources
-are stateful, so you must create a new instance of the validator for every
-document that you validate
+- Changed `XmlSchemaValidator` to have only instance methods, to avoid
+confusion with the order of parameters. The XML sources are stateful, so you
+must create a new instance of the validator for every document
 - Added `XmlVulnerabilities` utility for checking whether an XML document may
 contain an XXE or DoS attack
 
